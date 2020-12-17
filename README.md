@@ -2,7 +2,7 @@
 The exercise included are based on the tutorial from Open3D.
 
 Python Function Summary:
-- Read a point cloud from file  .xyz  .xyzn  .xyzrgb   .pts   .ply   .pcd
+- Read a point cloud from file  .xyz  .xyzn  .xyzrgb   .pts   .ply   .pcd \\
   xxx = 03d.io.read_point_cloud("file path") 
 - Voxel Downsampling uses a regular voxel grid
   xxx = xxx.voxel_down_sample(voxel_size = float)
