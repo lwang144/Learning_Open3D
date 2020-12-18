@@ -7,6 +7,12 @@ The examples included above are based on the tutorial from Open3D using both Pyt
     Python: xxx = 03d.io.read_point_cloud("file path") 
     C++: 
   ```
+  - visualize the point cloud
+    [Parameters](http://www.open3d.org/docs/release/python_api/open3d.visualization.draw_geometries.html)
+  ```
+    Python: o3d.visualization.draw_geometries([xxx], zoom=float....)
+    C++:
+  ```
   - Voxel Downsampling uses a regular voxel grid
   ```
     Python: xxx = xxx.voxel_down_sample(voxel_size = float)
@@ -19,7 +25,7 @@ The examples included above are based on the tutorial from Open3D using both Pyt
   ```
   - Reads a json file that specifies polygon selection area
   ```
-    Python: xxx = o3d.visualization.read_selection_polygon_volume()
+    Python: xxx = o3d.visualization.read_selection_polygon_volume("file path")
     C++: 
   ```
   - Filter out(Crop) points
@@ -27,8 +33,25 @@ The examples included above are based on the tutorial from Open3D using both Pyt
     Python: xxx.crop_point_cloud(yyy)
     C++: 
   ```
-  - Paint point cloud
+  - Paint point cloud [xxx]
   ```
     Python: xxx.paint_uniform_color([R,G,B])
+    C++: 
+  ```
+  - Compute the distance from the source point cloud [xxx] to a target point cloud [yyy]
+  ```
+    Python: xxx.compute_point_cloud_distance(yyy)
+    C++: 
+  ```
+  - Get axis aligned/oriented bounding box
+  ```
+    Python: xxx.get_axis_aligned_bounding_box()
+    Python: xxx.get_oriented_bounding_box()
+    C++: 
+    C++:
+  ```
+  - Comput the convex hull of a point cloud [xxx], which contains all points
+  ```
+    Python: xxx.compute_convex_hull()
     C++: 
   ```
