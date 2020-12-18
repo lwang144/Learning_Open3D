@@ -5,8 +5,7 @@ import copy
 import os
 import sys
 
-#sys.path.append('..')
-#import open3d_tutorial as o3dtut
+import open3d_tutorial as o3dtut
 
 ##----- Load point cloud -----##
 print("Load a ply point cloud, print it, and render it")
@@ -35,7 +34,7 @@ print(downpcd.normals[0])
 print("Load a polygon volume and use it to crop the original point cloud")
 # reads a json file that specifies polygon selection area
 vol = o3d.visualization.read_selection_polygon_volume("../test_data/Crop/cropped.json")
-# ilters out points. Only the chair remains.
+# filters out points. Only the chair remains.
 chair = vol.crop_point_cloud(pcd)
 
 
@@ -59,12 +58,16 @@ boundingOriented.color = (0, 1, 0)
 
 
 ##----- Convex hull -----##
-
+#rabit = o3dtut.get_bunny_mesh().sample_points_poisson_disk(number_of_points=2000)
+#hull, _ = rabit.compute_convex_hull()
+#hull_ls = o3d.geometry.LineSet.create_from_triangle_mesh(hull)
+#hull_ls.paint_uniform_color([1,0,0])
+#o3d.visualization.draw_geometries([rabit, hull_ls])
 
 # visualize the point cloud
-o3d.visualization.draw_geometries([chair, boundingAligned, boundingOriented],
+""" o3d.visualization.draw_geometries([chair, boundingAligned, boundingOriented],
                                   zoom=0.5,
                                   front=[0.4257, -0.2125, -0.8795],
                                   lookat=[2.6172, 2.0475, 1.532],
                                   up=[-0.0694, -0.9768, 0.2024],
-                                  point_show_normal=False)
+                                  point_show_normal=False) """
