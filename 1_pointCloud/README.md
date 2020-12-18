@@ -8,7 +8,7 @@ The examples included above are based on the tutorial from Open3D using both Pyt
     C++: 
   ```
   - visualize the point cloud
-    [Parameters](http://www.open3d.org/docs/release/python_api/open3d.visualization.draw_geometries.html)
+    [(Python Parameters)](http://www.open3d.org/docs/release/python_api/open3d.visualization.draw_geometries.html)
   ```
     Python: o3d.visualization.draw_geometries([xxx], zoom=float....)
     C++:

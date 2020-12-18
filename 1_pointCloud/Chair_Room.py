@@ -64,6 +64,9 @@ boundingOriented.color = (0, 1, 0)
 #hull_ls.paint_uniform_color([1,0,0])
 #o3d.visualization.draw_geometries([rabit, hull_ls])
 
+##----- DBSCAN Clustering -----##
+
+
 # visualize the point cloud
 """ o3d.visualization.draw_geometries([chair, boundingAligned, boundingOriented],
                                   zoom=0.5,
