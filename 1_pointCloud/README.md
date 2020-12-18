@@ -1,7 +1,7 @@
 # Learning_Open3D
 The examples included above are based on the tutorial from Open3D using both Python and C++. Hope this document can help you! 
 
-## Geometry Point Cloud Function Summary:**
+## Geometry Point Cloud Function Summary:
   - Read a point cloud from file  .xyz  .xyzn  .xyzrgb   .pts   .ply   .pcd 
   ```
     Python: xxx = 03d.io.read_point_cloud("file path") 
