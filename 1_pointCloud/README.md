@@ -55,3 +55,24 @@ The examples included above are based on the tutorial from Open3D using both Pyt
     Python: xxx.compute_convex_hull()
     C++: 
   ```
+  - DBSCAN Clustering
+  ```
+  Python: xxx.cluster_dbscan(eps, min_points)
+  C++: 
+  ```
+  - Plane segmentation
+   
+   [distance_threshold: defines the maximum distance a point can have to an estimated plane to be considered an inlier]
+
+   [ransac_n: defines the number of points that are randomly sampled to estimate a plane]
+   
+   [num_iteration: defines how often a random plane is sampled and verified]
+  ```
+  Python: xxx.segment_plane(distance_threshold, ransac_n, num_iterations)
+  C++:
+  ```
+  - Hidden point removal
+  ```
+  Python: xxx.hidden_point_removal()
+  C++:
+  ```
