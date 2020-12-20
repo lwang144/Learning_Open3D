@@ -7,6 +7,12 @@ The examples included above are based on the tutorial from Open3D using both Pyt
 
 **Open3D Github:** [Open3D.git](https://github.com/intel-isl/Open3D)
 
+# Dependencies
+    - Eigen 3
+    - Open3D
+# Docker
+    - Dockerfile Example
+
 **Function Summary:**
 1. [**Geometry: Point Cloud Common Function Summary(Python & C++)**](https://github.com/LYON-WANG/Learning_Open3D/blob/master/1_pointCloud/README.md)
 2. **Geometry: Mesh Function Summary(Python & C++)**
