@@ -5,7 +5,9 @@ CmakeList for C++ project: [CmakeLists.txt](https://github.com/LYON-WANG/Learnin
 
 [C++ Examples](https://github.com/LYON-WANG/Learning_Open3D/tree/master/1_pointCloud/src) 
 
-RUN: ```mkdir build
+RUN: 
+```
+  mkdir build
   cd build
   cmake ..
   make
