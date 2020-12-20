@@ -11,12 +11,12 @@ The examples included above are based on the tutorial from Open3D using both Pyt
     [(Python Parameters)](http://www.open3d.org/docs/release/python_api/open3d.visualization.draw_geometries.html)
   ```
     Python: o3d.visualization.draw_geometries([xxx], zoom=float....)
-    C++:
+    C++: open3d::visualization::DrawGeometries(geometry_ptrs, window_name, width, height, left, top);
   ```
   - Voxel Downsampling uses a regular voxel grid
   ```
     Python: xxx = xxx.voxel_down_sample(voxel_size = float)
-    C++: 
+    C++: auto downsampled = cloud_ptr -> VoxelDownSample(float);
   ```
   - Compute normal for every point parameter[radius: searching radius, max_nn: maximum nearest neighbor]
   ```
@@ -47,8 +47,8 @@ The examples included above are based on the tutorial from Open3D using both Pyt
   ```
     Python: xxx.get_axis_aligned_bounding_box()
     Python: xxx.get_oriented_bounding_box()
-    C++: 
-    C++:
+    C++: cloud_ptr-> GetAxisAlignedBoundingBox();
+    C++: cloud_ptr -> GetOrientedBoundingBox();
   ```
   - Comput the convex hull of a point cloud [xxx], which contains all points
   ```
