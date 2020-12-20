@@ -3,13 +3,20 @@ The examples included above are based on the tutorial from Open3D using both Pyt
 
 CmakeList for C++ project: [CmakeLists.txt](https://github.com/LYON-WANG/Learning_Open3D/blob/master/1_pointCloud/CMakeLists.txt)
 
+[C++ Examples](https://github.com/LYON-WANG/Learning_Open3D/tree/master/1_pointCloud/src) 
+
+RUN: ```mkdir build
+  cd build
+  cmake ..
+  make
+```
+
 ## Common Geometry Point Cloud Function Summary:
   - Read a point cloud from file  .xyz  .xyzn  .xyzrgb   .pts   .ply   .pcd 
   ```
     Python: xxx = 03d.io.read_point_cloud("file path") 
     C++: auto cloud_ptr = std::make_shared<open3d::geometry::PointCloud>();
-    // Create a pointcloud from a file Return an empty pointcloud, if fail to read the file.
-    cloud_ptr = open3d::io::CreatePointCloudFromFile("file path");
+      cloud_ptr = open3d::io::CreatePointCloudFromFile("file path");
   ```
   - visualize the point cloud
     [(Python Parameters)](http://www.open3d.org/docs/release/python_api/open3d.visualization.draw_geometries.html)
@@ -40,7 +47,8 @@ CmakeList for C++ project: [CmakeLists.txt](https://github.com/LYON-WANG/Learnin
   - Paint point cloud [xxx]
   ```
     Python: xxx.paint_uniform_color([R,G,B])
-    C++: 
+    C++: const Eigen::Vector3d color = {R,G,B};
+	  xxx -> PaintUniformColor(color);
   ```
   - Compute the distance from the source point cloud [xxx] to a target point cloud [yyy]
   ```
@@ -52,7 +60,7 @@ CmakeList for C++ project: [CmakeLists.txt](https://github.com/LYON-WANG/Learnin
     Python: xxx.get_axis_aligned_bounding_box()
     Python: xxx.get_oriented_bounding_box()
     C++: open3d::geometry::AxisAlignedBoundingBox bounding_box_aligned = xxx -> GetAxisAlignedBoundingBox();
-    std::shared_ptr<open3d::geometry::AxisAlignedBoundingBox> bounding_box(new open3d::geometry::AxisAlignedBoundingBox(bounding_box_aligned));
+      std::shared_ptr<open3d::geometry::AxisAlignedBoundingBox> bounding_box(new open3d::geometry::AxisAlignedBoundingBox(bounding_box_aligned));
   ```
   - Comput the convex hull of a point cloud [xxx], which contains all points
   ```
@@ -73,7 +81,8 @@ CmakeList for C++ project: [CmakeLists.txt](https://github.com/LYON-WANG/Learnin
    [num_iteration: defines how often a random plane is sampled and verified]
   ```
   Python: xxx.segment_plane(distance_threshold, ransac_n, num_iterations)
-  C++:
+  C++: std::tuple<Eigen::Vector4d, std::vector<size_t>> vRes = 
+                    xxx -> SegmentPlane(distance_threshold, ransac_n, num_iterations);
   ```
   - Hidden point removal
   ```

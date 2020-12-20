@@ -88,13 +88,37 @@ int main(int argc, char *argv[])
 			pcColor.push_back(c);
 		}
 	}
-    //----- Paint point cloud -----//
+    // Paint point cloud
     cloud_ptr -> colors_ = pcColor;
+
+
+    //----- Plane segmentation -----//
+    double distance_threshold = 0.01;
+    int ransac_n = 3;
+    int num_iterations = 1000;    
+    std::tuple<Eigen::Vector4d, std::vector<size_t>> vRes = 
+                    cloud_ptr -> SegmentPlane(distance_threshold, ransac_n, num_iterations); // Return plane model and inliers
+    // [a b c d] plane model
+	Eigen::Vector4d para = std::get<0>(vRes);
+    // Inliers
+    std::vector<size_t> selectedIndex = std::get<1>(vRes);
+    
+    // Paint inliers red
+    std::shared_ptr<open3d::geometry::PointCloud> inPC = cloud_ptr -> SelectByIndex(selectedIndex, false);
+	const Eigen::Vector3d colorIn = {1,0,0};
+	inPC->PaintUniformColor(colorIn);
+    // Paint inliers black
+	std::shared_ptr<open3d::geometry::PointCloud> outPC = cloud_ptr -> SelectByIndex(selectedIndex, true);
+	//const Eigen::Vector3d colorOut = { 0,0,0 };
+	//outPC->PaintUniformColor(colorOut);
+
 
     //----- Point cloud Visualization -----//
     //open3d::visualization::DrawGeometries({downsampled}, "PointCloud", 1600, 900);
     visualizer.CreateVisualizerWindow("Open3D Test", 1600, 900);
-    visualizer.AddGeometry(cloud_ptr);
+    //visualizer.AddGeometry(cloud_ptr);
+    visualizer.AddGeometry(inPC);
+    visualizer.AddGeometry(outPC);
     visualizer.AddGeometry(bounding_box);
     visualizer.Run();
     visualizer.DestroyVisualizerWindow();
