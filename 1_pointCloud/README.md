@@ -1,11 +1,15 @@
 # Learning_Open3D
 The examples included above are based on the tutorial from Open3D using both Python and C++. Hope this document can help you! 
 
-## Geometry Point Cloud Function Summary:
+CmakeList for C++ project: [CmakeLists.txt](https://github.com/LYON-WANG/Learning_Open3D/blob/master/1_pointCloud/CMakeLists.txt)
+
+## Common Geometry Point Cloud Function Summary:
   - Read a point cloud from file  .xyz  .xyzn  .xyzrgb   .pts   .ply   .pcd 
   ```
     Python: xxx = 03d.io.read_point_cloud("file path") 
-    C++: 
+    C++: auto cloud_ptr = std::make_shared<open3d::geometry::PointCloud>();
+    // Create a pointcloud from a file Return an empty pointcloud, if fail to read the file.
+    cloud_ptr = open3d::io::CreatePointCloudFromFile("file path");
   ```
   - visualize the point cloud
     [(Python Parameters)](http://www.open3d.org/docs/release/python_api/open3d.visualization.draw_geometries.html)
@@ -21,7 +25,7 @@ The examples included above are based on the tutorial from Open3D using both Pyt
   - Compute normal for every point parameter[radius: searching radius, max_nn: maximum nearest neighbor]
   ```
     Python: xxx.estimate_normals()
-    C++: 
+    C++: xxx -> EstimateNormals(open3d::geometry::KDTreeSearchParamHybrid(radius, max_nn));
   ```
   - Reads a json file that specifies polygon selection area
   ```
@@ -43,11 +47,11 @@ The examples included above are based on the tutorial from Open3D using both Pyt
     Python: xxx.compute_point_cloud_distance(yyy)
     C++: 
   ```
-  - Get axis aligned/oriented bounding box
+  - Get axis aligned/oriented bounding box of the point cloud xxx
   ```
     Python: xxx.get_axis_aligned_bounding_box()
     Python: xxx.get_oriented_bounding_box()
-    C++: open3d::geometry::AxisAlignedBoundingBox bounding_box_aligned = cloud_ptr -> GetAxisAlignedBoundingBox();
+    C++: open3d::geometry::AxisAlignedBoundingBox bounding_box_aligned = xxx -> GetAxisAlignedBoundingBox();
     std::shared_ptr<open3d::geometry::AxisAlignedBoundingBox> bounding_box(new open3d::geometry::AxisAlignedBoundingBox(bounding_box_aligned));
   ```
   - Comput the convex hull of a point cloud [xxx], which contains all points
@@ -57,8 +61,8 @@ The examples included above are based on the tutorial from Open3D using both Pyt
   ```
   - DBSCAN Clustering
   ```
-  Python: xxx.cluster_dbscan(eps, min_points)
-  C++: 
+    Python: xxx.cluster_dbscan(eps, min_points)
+    C++: std::vector<int>labels = cloud_ptr -> ClusterDBSCAN(eps, min_points, true);
   ```
   - Plane segmentation
    
