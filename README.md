@@ -14,7 +14,8 @@ The examples included above are based on the tutorial from Open3D using both Pyt
     - Dockerfile Example
 
 # Docker
-    - [CmakeList Example](https://github.com/LYON-WANG/Learning_Open3D/blob/master/1_pointCloud/CMakeLists.txt)
+
+    [CmakeList Example](https://github.com/LYON-WANG/Learning_Open3D/blob/master/1_pointCloud/CMakeLists.txt)
 
 # Function Summary:
 1. [**Geometry: Point Cloud Common Function Summary(Python & C++)**](https://github.com/LYON-WANG/Learning_Open3D/blob/master/1_pointCloud/README.md)
