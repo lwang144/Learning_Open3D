@@ -35,13 +35,15 @@ int main(int argc, char *argv[])
 
     // Get axis aligned/oriented bounding box
     open3d::geometry::AxisAlignedBoundingBox bounding_box_aligned = cloud_ptr -> GetAxisAlignedBoundingBox();
-    std::shared_ptr<open3d::geometry::AxisAlignedBoundingBox> 
+    std::shared_ptr<open3d::geometry::AxisAlignedBoundingBox> bounding_box(
+                new open3d::geometry::AxisAlignedBoundingBox(bounding_box_aligned));
+    
 
     // Point cloud Visualization
     //open3d::visualization::DrawGeometries({downsampled}, "PointCloud", 1600, 900);
     visualizer.CreateVisualizerWindow("Open3D Test", 1600, 900);
     visualizer.AddGeometry(downsampled);
-    visualizer.AddGeometry(bounding_box_aligned);
+    visualizer.AddGeometry(bounding_box);
     visualizer.Run();
     visualizer.DestroyVisualizerWindow();
 

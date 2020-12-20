@@ -47,8 +47,8 @@ The examples included above are based on the tutorial from Open3D using both Pyt
   ```
     Python: xxx.get_axis_aligned_bounding_box()
     Python: xxx.get_oriented_bounding_box()
-    C++: cloud_ptr-> GetAxisAlignedBoundingBox();
-    C++: cloud_ptr -> GetOrientedBoundingBox();
+    C++: open3d::geometry::AxisAlignedBoundingBox bounding_box_aligned = cloud_ptr -> GetAxisAlignedBoundingBox();
+    std::shared_ptr<open3d::geometry::AxisAlignedBoundingBox> bounding_box(new open3d::geometry::AxisAlignedBoundingBox(bounding_box_aligned));
   ```
   - Comput the convex hull of a point cloud [xxx], which contains all points
   ```
