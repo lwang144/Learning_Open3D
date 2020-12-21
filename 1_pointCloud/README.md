@@ -22,7 +22,7 @@ The examples included above are based on the tutorial from Open3D using both Pyt
          cloud_ptr = open3d::io::CreatePointCloudFromFile("file path");
   ```
   - visualize the point cloud
-    [(Python Parameters)](http://www.open3d.org/docs/release/python_api/open3d.visualization.draw_geometries.html)
+    [[Python Parameters]](http://www.open3d.org/docs/release/python_api/open3d.visualization.draw_geometries.html)
   ```
     Python: o3d.visualization.draw_geometries([xxx], zoom=float....)
 
@@ -101,6 +101,6 @@ The examples included above are based on the tutorial from Open3D using both Pyt
   - Hidden point removal
   ```
   Python: xxx.hidden_point_removal()
-  
+
   C++:
   ```
