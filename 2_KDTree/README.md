@@ -24,27 +24,34 @@ Open3D supported nearest neighbor search method:
 ```
 
 ## Common Geometry KDTree Function Summary:
-  - Build KDTree from point cloud
+  - Build KDTree [kdtree] from point cloud [pcd]
   ```
-  **Python:**
+  Python: pcd_tree = o3d.geometry.KDTreeFlann(pcd)
 
-  **C++:**
+  C++: open3d::geometry::KDTreeFlann kdtree;
+       kdtree.SetGeometry(*pcd);
   ```
   - K Nearest Neighbors Search: Returns a list of indices of the k nearest neighbors of the anchor point.
   ```
-  **Python:**
+  Python: [k, idx, _] = pcd_tree.search_knn_vector_3d(query, int knn)
 
-  **C++:**
+  C++: kdtree.SearchKNN(query, knn, indices, distance2);
   ```
   - Radius Nearest Neighbors Search: Query all points with distances to the anchor point less than a given radius. 
   ```
-  **Python:**
+  Python: [k, idx, _] = pcd_tree.search_radius_vector_3d(query, float radius)
 
-  **C++:**
+  C++: kdtree.SearchRadius(query, float radius);
   ```
   - RKNN Radius K Nearest Neighbors Search
   ```
-  **Python:**
+  Python: [k, idx, _] = pcd_tree.search_hybrid_vector_3d(query, float radius, int knn)
 
-  **C++:**
+  C++: kdtree.SearchHybrid(query, float radius, int knn);
+  ```
+  - Paint 1500th point red
+  ```
+  Python: pcd.colors[1500] = [1, 0, 0]
+
+  C++: cloud_ptr -> colors_[1500] = Eigen::Vector3d(1, 0, 0);
   ```

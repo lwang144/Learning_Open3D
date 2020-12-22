@@ -18,35 +18,35 @@ The examples included above are based on the tutorial from Open3D using both Pyt
 ## Common Geometry Point Cloud Function Summary:
   - Read a point cloud from file  .xyz  .xyzn  .xyzrgb   .pts   .ply   .pcd 
   ```
-    **Python:** xxx = 03d.io.read_point_cloud("file path") 
+    Python: xxx = 03d.io.read_point_cloud("file path") 
 
-    **C++:** auto cloud_ptr = std::make_shared<open3d::geometry::PointCloud>();
+    C++: auto cloud_ptr = std::make_shared<open3d::geometry::PointCloud>();
          cloud_ptr = open3d::io::CreatePointCloudFromFile("file path");
   ```
   - visualize the point cloud
     [[Python Parameters]](http://www.open3d.org/docs/release/python_api/open3d.visualization.draw_geometries.html)
   ```
-    **Python:** o3d.visualization.draw_geometries([xxx], zoom=float....)
+    Python: o3d.visualization.draw_geometries([xxx], zoom=float....)
 
-    **C++:** open3d::visualization::DrawGeometries(geometry_ptrs, window_name, width, height, left, top);
+    C++: open3d::visualization::DrawGeometries(geometry_ptrs, window_name, width, height, left, top);
   ```
   - Voxel Downsampling uses a regular voxel grid
   ```
-    **Python:** xxx = xxx.voxel_down_sample(voxel_size = float)
+    Python: xxx = xxx.voxel_down_sample(voxel_size = float)
 
-    **C++:** auto downsampled = cloud_ptr -> VoxelDownSample(float);
+    C++: auto downsampled = cloud_ptr -> VoxelDownSample(float);
   ```
   - Compute normal for every point parameter[radius: searching radius, max_nn: maximum nearest neighbor]
   ```
-    **Python:** xxx.estimate_normals()
+    Python: xxx.estimate_normals()
 
-    **C++:** xxx -> EstimateNormals(open3d::geometry::KDTreeSearchParamHybrid(radius, max_nn));
+    C++: xxx -> EstimateNormals(open3d::geometry::KDTreeSearchParamHybrid(radius, max_nn));
   ```
   - Reads a json file that specifies polygon selection area
   ```
-    **Python:** xxx = o3d.visualization.read_selection_polygon_volume("file path")
+    Python: xxx = o3d.visualization.read_selection_polygon_volume("file path")
 
-    **C++:** 
+    C++: 
   ```
   - Filter out(Crop) points
   ```
