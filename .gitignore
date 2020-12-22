@@ -1,3 +1,6 @@
 1_pointCloud/build
 1_pointCloud/bin
 1_pointCloud/__pycache__
+2_KDTree/build
+2_KDTree/bin
+2_KDTree/__pycache__

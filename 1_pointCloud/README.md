@@ -1,9 +1,11 @@
-# Learning_Open3D
+# Point Cloud
 The examples included above are based on the tutorial from Open3D using both Python and C++. Hope this document can help you! 
 
 **CmakeList for C++ project:** [CmakeLists.txt](https://github.com/LYON-WANG/Learning_Open3D/blob/master/1_pointCloud/CMakeLists.txt)
 
-[C++ Examples](https://github.com/LYON-WANG/Learning_Open3D/tree/master/1_pointCloud/src) 
+[C++ Examples](https://github.com/LYON-WANG/Learning_Open3D/tree/master/1_pointCloud/src)  
+
+[Python Examples](https://github.com/LYON-WANG/Learning_Open3D/blob/master/1_pointCloud/pointCloud.py)
 
 **RUN:** 
 ```
