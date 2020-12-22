@@ -64,10 +64,4 @@ RUN mkdir build && \
     cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_INSTALL_PREFIX=/tmp/dest .. && \
     make
 
-FROM ubuntu:18.04
-ENV DEBIAN_FRONTEND=noninteractive 
-
-WORKDIR /usr/bin
-COPY --from=builder /tmp/dest /usr
 ENTRYPOINT ["/usr/bin/KDTree"]
-

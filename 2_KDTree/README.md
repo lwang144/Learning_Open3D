@@ -9,7 +9,7 @@ Open3D supported nearest neighbor search method:
   2. Radius Nearest Neighbors Search
   3. RKNN Radius K Nearest Neighbors Search
 
-[**C++ Examples**](https://github.com/LYON-WANG/Learning_Open3D/tree/master/2_KDTree/src)
+[**C++ Examples**](https://github.com/LYON-WANG/Learning_Open3D/tree/master/2_KDTree/src/KDTree.cpp)
 
 [**Python Examples**](https://github.com/LYON-WANG/Learning_Open3D/blob/master/2_KDTree/KDTree.py)
 
