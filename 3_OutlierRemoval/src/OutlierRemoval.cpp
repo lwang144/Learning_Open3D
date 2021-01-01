@@ -26,18 +26,23 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+    // Voxel Downsampling
+    open3d::utility::LogInfo("Downsample the point cloud with a voxel of 0.05");
+    auto downsampled = cloud_ptr -> VoxelDownSample(0.02);
+
+    //!! Choose one method!!
     //----- Statistical outlier removal -----//
-    //std::shared_ptr<open3d::geometry::PointCloud> cl;
-    //std::vector<size_t> ind;
-    //std::tie(cl, ind) = cloud_ptr -> RemoveStatisticalOutliers(20, 2.0); // nb_neighbors, std_radio
+    std::shared_ptr<open3d::geometry::PointCloud> cl;
+    std::vector<size_t> ind;
+    std::tie(cl, ind) = downsampled -> RemoveStatisticalOutliers(20, 2.0); // nb_neighbors, std_radio
 
     //----- Radius outlier removal -----//
     std::shared_ptr<open3d::geometry::PointCloud> cl;
     std::vector<size_t> ind;
-    std::tie(cl, ind) = cloud_ptr -> RemoveRadiusOutliers(16, 0.05); // nb_points, std_radius
+    std::tie(cl, ind) = downsampled -> RemoveRadiusOutliers(16, 0.05); // nb_points, std_radius
     
-    std::shared_ptr<open3d::geometry::PointCloud> inlier_cloud = cloud_ptr -> SelectByIndex(ind);
-    std::shared_ptr<open3d::geometry::PointCloud> outlier_cloud = cloud_ptr -> SelectByIndex(ind, true);
+    std::shared_ptr<open3d::geometry::PointCloud> inlier_cloud = downsampled -> SelectByIndex(ind);
+    std::shared_ptr<open3d::geometry::PointCloud> outlier_cloud = downsampled -> SelectByIndex(ind, true);
     inlier_cloud -> PaintUniformColor(Eigen::Vector3d(0.8, 0.8, 0.8));
     outlier_cloud -> PaintUniformColor(Eigen::Vector3d(1, 0, 0));    
 
