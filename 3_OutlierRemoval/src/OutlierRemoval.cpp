@@ -27,13 +27,25 @@ int main(int argc, char *argv[])
     }
 
     //----- Statistical outlier removal -----//
-    std::shared_ptr<open3d::geometry::PointCloud> cl;
-    std::vector<size_t> ind;
-    std::tie(cl, ind) = cloud_ptr -> RemoveStatisticalOutliers(16, 0.05);
+    //std::shared_ptr<open3d::geometry::PointCloud> cl;
+    //std::vector<size_t> ind;
+    //std::tie(cl, ind) = cloud_ptr -> RemoveStatisticalOutliers(20, 2.0); // nb_neighbors, std_radio
 
     //----- Radius outlier removal -----//
+    std::shared_ptr<open3d::geometry::PointCloud> cl;
+    std::vector<size_t> ind;
+    std::tie(cl, ind) = cloud_ptr -> RemoveRadiusOutliers(16, 0.05); // nb_points, std_radius
     
-    
-    
+    std::shared_ptr<open3d::geometry::PointCloud> inlier_cloud = cloud_ptr -> SelectByIndex(ind);
+    std::shared_ptr<open3d::geometry::PointCloud> outlier_cloud = cloud_ptr -> SelectByIndex(ind, true);
+    inlier_cloud -> PaintUniformColor(Eigen::Vector3d(0.8, 0.8, 0.8));
+    outlier_cloud -> PaintUniformColor(Eigen::Vector3d(1, 0, 0));    
+
+    //----- Point cloud Visualization -----//
+    visualizer.CreateVisualizerWindow("Open3D Down Sampling", 1600, 900);
+    visualizer.AddGeometry(inlier_cloud);
+    visualizer.AddGeometry(outlier_cloud);
+    visualizer.Run();
+    visualizer.DestroyVisualizerWindow();
     return 0;
 }
