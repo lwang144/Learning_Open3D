@@ -34,7 +34,9 @@ int main(int argc, char *argv[])
     //----- Statistical outlier removal -----//
     std::shared_ptr<open3d::geometry::PointCloud> cl;
     std::vector<size_t> ind;
-    std::tie(cl, ind) = downsampled -> RemoveStatisticalOutliers(20, 2.0); // nb_neighbors, std_radio
+    // nb_neighbors: Specifies how many neighbors are taken into account in order to calculate the average distance for a given point.
+    // std_ratio: The lower this number the more aggressive the filter will be.
+    std::tie(cl, ind) = downsampled -> RemoveStatisticalOutliers(20, 2.0); 
 
     //----- Radius outlier removal -----//
     std::shared_ptr<open3d::geometry::PointCloud> cl;
