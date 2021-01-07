@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
     
     auto mesh1 = open3d::geometry::TriangleMesh::CreateFromPointCloudAlphaShape(*pcd, alpha);
     mesh1 -> ComputeVertexNormals();
-    open3d::visualization::DrawGeometries({mesh1}, "Alpha Shape", 640,480,50,50,false,false,true);
+    open3d::visualization::DrawGeometries({mesh1}, "Alpha Shape", 640, 480, 50, 50, false, false, true);
 
 
     //----- Ball Pivoting -----//
@@ -56,8 +56,16 @@ int main(int argc, char* argv[])
     auto rec_mesh = open3d::geometry::TriangleMesh::CreateFromPointCloudBallPivoting(*pcd1,radii);
     open3d::visualization::DrawGeometries({pcd1, rec_mesh}, "Ball Pivoting");
 
-
-    //----- Poisson Surface Reconstruction -----//
+    //----- Normal Estimation -----//
+    std::cout << "Normal number: " << pcd1->normals_.size() << std::endl;
+    pcd1 -> normals_.clear();  // Invalidate existing normals
+    std::cout << "Normal number after clear: " << pcd1->normals_.size() << std::endl;
+    pcd1 -> open3d::geometry::PointCloud::EstimateNormals();
+    std::cout << "Estimate normal number: " << pcd1->normals_.size() << std::endl;
+    open3d::visualization::DrawGeometries({pcd1}, "Normal Estimation", 640, 480, 50, 50, true);
     
+    // Propagates the normal orientation using a minimum spanning tree.
+    pcd1 -> OrientNormalsConsistentTangentPlane(100);
+    open3d::visualization::DrawGeometries({pcd1}, "Normal Estimation", 640, 480, 50, 50, true);
     return 0;
 }
