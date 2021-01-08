@@ -28,3 +28,10 @@ add_executable(${PROJECT_NAME}
 # Open3D libraries
 target_link_libraries(${PROJECT_NAME} ${LIBRARIES} ${Open3D_LIBRARIES})
 target_include_directories(${PROJECT_NAME} PUBLIC ${Open3D_INCLUDE_DIRS})
+
+# Name of executable file and path of source file
+add_executable(PoissonReconstruction
+	${CMAKE_CURRENT_SOURCE_DIR} src/PoissonReconstruction.cpp)
+# Open3D libraries
+target_link_libraries(PoissonReconstruction ${LIBRARIES} ${Open3D_LIBRARIES})
+target_include_directories(PoissonReconstruction PUBLIC ${Open3D_INCLUDE_DIRS})
