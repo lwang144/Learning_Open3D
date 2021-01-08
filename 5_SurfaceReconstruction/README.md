@@ -3,9 +3,9 @@ The examples included above are based on the tutorial from Open3D using both Pyt
 
 When collecting data from scanning devices, the resulting point cloud tends to contain noise and artifacts that one would like to remove.
 
-[**C++ Examples**]()
+[**C++ Examples**](https://github.com/LYON-WANG/Learning_Open3D/tree/master/5_SurfaceReconstruction/src)
 
-[**Python Examples**]()
+[**Python Poisson Examples**](https://github.com/LYON-WANG/Learning_Open3D/blob/master/5_SurfaceReconstruction/SurfaceReconstruction.py)
 
 **RUN C++ Example:** 
 ```
@@ -14,13 +14,27 @@ When collecting data from scanning devices, the resulting point cloud tends to c
   cmake ..
   make
   cd ../bin
-  ./Voxelization ../../test_data/fragment.pcd ../../test_data/Bunny.ply
+  ./PoissonReconstruction ../../test_data/eagle.ply 
+  ./SurfaceReconstruction ../../test_data/Bunny.ply
 ```
 
 ## Common Geometry KDTree Function Summary:
-  - 
+  - Alpha shapes surface reconstruction
   ```
-  Python: 
+  Python: create_from_point_cloud_alpha_shape(pcd, alpha)
 
-  C++: 
+  C++: auto mesh = open3d::geometry::TriangleMesh::CreateFromPointCloudAlphaShape(*pcd, alpha);
+  ```
+  - Ball pivoting surface reconstruction
+  ```
+  Python: create_from_point_cloud_ball_pivoting(pcd, alpha)
+
+  C++: auto mesh = open3d::geometry::TriangleMesh::CreateFromPointCloudBallPivoting(*pcd,radii);
+  ```
+  - Ball pivoting surface reconstruction
+  ```
+  Python: create_from_point_cloud_ball_pivoting(pcd, alpha)
+
+  C++: std::tie(mesh, dentities)= open3d::geometry::TriangleMesh::CreateFromPointCloudPoisson(*pcd,alpha);
+    
   ```
