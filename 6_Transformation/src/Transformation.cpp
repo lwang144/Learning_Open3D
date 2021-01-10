@@ -54,7 +54,7 @@ int main(int argc, char* argv[])
     T(0, 3) = 1;
     T(1,3) = 1.3;
     std::cout << "T: " << T << std::endl;
-    mesh3_t ->Transform(T);
+    mesh3_t -> Transform(T);
     open3d::visualization::DrawGeometries({mesh3, mesh3_t}, "General Transformation");
 
     return 0;

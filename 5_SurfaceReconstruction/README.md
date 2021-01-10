@@ -18,7 +18,7 @@ When collecting data from scanning devices, the resulting point cloud tends to c
   ./SurfaceReconstruction ../../test_data/Bunny.ply
 ```
 
-## Common Geometry KDTree Function Summary:
+## Common Function Summary:
   - Alpha shapes surface reconstruction
   ```
   Python: create_from_point_cloud_alpha_shape(pcd, alpha)

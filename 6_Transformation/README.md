@@ -1,11 +1,11 @@
-# Surface Reconstruction
+# Transformation
 The examples included above are based on the tutorial from Open3D using both Python and C++. Hope this document can help you! 
 
 When collecting data from scanning devices, the resulting point cloud tends to contain noise and artifacts that one would like to remove.
 
-[**C++ Examples**](https://github.com/LYON-WANG/Learning_Open3D/tree/master/5_SurfaceReconstruction/src)
+[**C++ Examples**](https://github.com/LYON-WANG/Learning_Open3D/blob/master/6_Transformation/src/Transformation.cpp)
 
-[**Python Poisson Examples**](https://github.com/LYON-WANG/Learning_Open3D/blob/master/5_SurfaceReconstruction/SurfaceReconstruction.py)
+[**Python Poisson Examples**](https://github.com/LYON-WANG/Learning_Open3D/blob/master/6_Transformation/transformation.py)
 
 **RUN C++ Example:** 
 ```
@@ -14,27 +14,36 @@ When collecting data from scanning devices, the resulting point cloud tends to c
   cmake ..
   make
   cd ../bin
-  ./PoissonReconstruction ../../test_data/eagle.ply 
-  ./SurfaceReconstruction ../../test_data/Bunny.ply
+  ./Transformation
 ```
 
-## Common Geometry KDTree Function Summary:
-  - Alpha shapes surface reconstruction
+## Common Function Summary:
+  - Translate
   ```
-  Python: create_from_point_cloud_alpha_shape(pcd, alpha)
+  Python: mesh.translate((2,2,2), relative)
 
-  C++: auto mesh = open3d::geometry::TriangleMesh::CreateFromPointCloudAlphaShape(*pcd, alpha);
+  C++: mesh -> Translate(Eigen::Vector3d(2, 2, 2));
   ```
-  - Ball pivoting surface reconstruction
+  - Rotation
   ```
-  Python: create_from_point_cloud_ball_pivoting(pcd, alpha)
+  Python: R = mesh.get_rotation_matrix_from_xyz((np.pi / 2, 0, np.pi / 4))
+          mesh_r.rotate(R, center=(0, 0, 0))
 
-  C++: auto mesh = open3d::geometry::TriangleMesh::CreateFromPointCloudBallPivoting(*pcd,radii);
+  C++: auto R = mesh_r -> GetRotationMatrixFromXYZ(Eigen::Vector3d(PI/2, 0, PI/4));
+       mesh_r ->Rotate(R, Eigen::Vector3d(0, 0, 0));
   ```
-  - Ball pivoting surface reconstruction
+  - Scale
   ```
-  Python: create_from_point_cloud_ball_pivoting(pcd, alpha)
+  Python: mesh.scale(0.5, center=(0,0,0))
 
-  C++: std::tie(mesh, dentities)= open3d::geometry::TriangleMesh::CreateFromPointCloudPoisson(*pcd,alpha);
-    
+  C++: mesh_s -> Scale(0.5, Eigen::Vector3d(0, 0, 0)); // Scale ratio & relative 
+  ```
+  - General Transformation
+  ```
+  Python: T = np.eye(4)
+          T[:3, :3] = mesh.get_rotation_matrix_from_xyz((0, np.pi / 3, np.pi / 2))
+          T[0, 3] = 1
+          T[1, 3] = 1.3mesh.transform(T)
+
+  C++:  mesh -> Transform(T);
   ```
