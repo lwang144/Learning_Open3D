@@ -27,14 +27,14 @@ When collecting data from scanning devices, the resulting point cloud tends to c
   ```
   - Ball pivoting surface reconstruction
   ```
-  Python: create_from_point_cloud_ball_pivoting(pcd, radii)
+  Python: create_from_point_cloud_ball_pivoting(pcd, alpha)
 
   C++: auto mesh = open3d::geometry::TriangleMesh::CreateFromPointCloudBallPivoting(*pcd,radii);
   ```
   - Ball pivoting surface reconstruction
   ```
-  Python: create_from_point_cloud_poisson(pcd, depth)
+  Python: create_from_point_cloud_ball_pivoting(pcd, alpha)
 
-  C++: std::tie(mesh, dentities)= open3d::geometry::TriangleMesh::CreateFromPointCloudPoisson(*pcd, depth);
+  C++: std::tie(mesh, dentities)= open3d::geometry::TriangleMesh::CreateFromPointCloudPoisson(*pcd,alpha);
     
   ```
