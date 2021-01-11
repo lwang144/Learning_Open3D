@@ -25,7 +25,7 @@ int main(int argc, char* argv[])
         open3d::utility::LogInfo("Failed to read {}", argv[1]);
         return 1;
     }
-    auto voxel = open3d::geometry::VoxelGrid::CreateFromPointCloud(*cloud_ptr, 0.05);
+    auto voxel = open3d::geometry::VoxelGrid::CreateFromPointCloud(*cloud_ptr, 0.01);
     open3d::visualization::DrawGeometries({cloud_ptr, voxel});
 
     auto mesh = open3d::io::CreateMeshFromFile(argv[2]);
