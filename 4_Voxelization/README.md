@@ -2,7 +2,7 @@
 The examples included above are based on the tutorial from Open3D using both Python and C++. Hope this document can help you! 
 
 
-[**C++ Examples**]()
+[**C++ Examples**](https://github.com/LYON-WANG/Learning_Open3D/blob/master/4_Voxelization/src/Voxelization.cpp)
 
 [**Python Examples**]()
 
@@ -13,13 +13,5 @@ The examples included above are based on the tutorial from Open3D using both Pyt
   cmake ..
   make
   cd ../bin
-  ./Voxelization ../../test_data/fragment.pcd ../../test_data/Bunny.ply
+  ./Voxelization ../../test_data/Bunny.pcd ../../test_data/Armadillo.ply
 ```
-
-## Common Geometry KDTree Function Summary:
-  - 
-  ```
-  Python: 
-
-  C++: 
-  ```
