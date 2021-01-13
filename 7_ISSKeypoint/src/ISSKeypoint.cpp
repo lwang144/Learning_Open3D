@@ -8,11 +8,6 @@
 
 #include "open3d/Open3D.h"
 
-void keypoints_to_spheres(auto keypoints){
-    auto spheres = std::make_shared<open3d::geometry::TriangleMesh>();
-    
-}
-
 int main(int argc, char* argv[]) 
 {
     auto mesh = std::make_shared<open3d::geometry::TriangleMesh>();
