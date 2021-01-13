@@ -1,5 +1,5 @@
 # Learning_Open3D
-The examples included above are based on the tutorial from Open3D using both Python and C++. Open3D is a really good library. For the Pyhton tutorial, it's better to follow the [official Python tutorial](http://www.open3d.org/docs/release/getting_started.html), which is super great. These C++ codes are the exercise I did when learning Open3D. Hope this can help you when developing with Open3D! 
+The examples included above are based on the tutorial from Open3D using both Python and C++. Open3D is a really good library. For the Pyhton tutorial, it's better to follow the [official Python tutorial](http://www.open3d.org/docs/release/getting_started.html), which is super great. These C++ codes are the exercise I did when learning Open3D.
 
 **Installation** [Getting started](http://www.open3d.org/docs/release/getting_started.html)
 
