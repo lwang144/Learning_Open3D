@@ -5,7 +5,6 @@ import copy
 import os
 import sys
 import time
-#import open3d_tutorial as o3dtut
 
 def draw_registration_result(source, target, transformation):
     source_temp = copy.deepcopy(source)
@@ -27,6 +26,7 @@ threshold = 0.02
 trans_init = np.asarray([[0.862, 0.011, -0.507, 0.5],
                          [-0.139, 0.967, -0.215, 0.7],
                          [0.487, 0.255, 0.835, -1.4], [0.0, 0.0, 0.0, 1.0]])
+print(trans_init)
 draw_registration_result(source, target, trans_init)
 
 print("Initial alignment")

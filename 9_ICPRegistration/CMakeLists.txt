@@ -28,3 +28,9 @@ add_executable(${PROJECT_NAME}
 # Open3D libraries
 target_link_libraries(${PROJECT_NAME} ${LIBRARIES} ${Open3D_LIBRARIES})
 target_include_directories(${PROJECT_NAME} PUBLIC ${Open3D_INCLUDE_DIRS})
+
+# Name of executable file and path of source file
+add_executable(RobustICP ${CMAKE_CURRENT_SOURCE_DIR} src/RobustICP.cpp)
+# Open3D libraries
+target_link_libraries(RobustICP ${LIBRARIES} ${Open3D_LIBRARIES})
+target_include_directories(RobustICP PUBLIC ${Open3D_INCLUDE_DIRS})

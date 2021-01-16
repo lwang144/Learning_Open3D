@@ -30,12 +30,47 @@ int main(int argc, char* argv[])
     target = open3d::io::CreatePointCloudFromFile("../../test_data/ICP/cloud_bin_1.pcd");
     
     // Manually set the transformation matrix
-    Eigen::Matrix4d_u 
-
-
-    //
+    Eigen::Matrix4d trans_init;
+    trans_init << 0.862,  0.011, -0.507,  0.5,
+                 -0.139,  0.967, -0.215,  0.7,
+                  0.487,  0.255,  0.835, -1.4,
+                  0.0,    0.0,    0.0,    1.0;
+    // std::cout << "Trans_init:" << '\n' << trans_init << std::endl;
     std::cout << "Initial alignment: " << std::endl;
-    auto evaluation = open3d::pipelines::registration::EvaluateRegistration();
+    draw_registration_result(*source, *target, trans_init);
+    double threshold = 0.02;
+    auto evaluation = open3d::pipelines::registration::EvaluateRegistration(*source, *target, threshold, trans_init);
+    std::cout << "  fitness: " << evaluation.fitness_  << " (The higher, the better)"<< std::endl;
+    std::cout << "  inlier_rms: " << evaluation.inlier_rmse_  << " (The lower, the better)"<< std::endl;
 
+    std::cout << "--------------------------------------------------" << std::endl;
+    std::cout << "Point-to-point ICP: " << std::endl;
+    auto reg_p2p = open3d::pipelines::registration::RegistrationICP(*source, *target, threshold,
+                trans_init, open3d::pipelines::registration::TransformationEstimationPointToPoint());
+    evaluation = open3d::pipelines::registration::EvaluateRegistration(*source, *target, threshold, reg_p2p.transformation_);
+    std::cout << "  fitness: " << evaluation.fitness_  << " (The higher, the better)"<< std::endl;
+    std::cout << "  inlier_rms: " << evaluation.inlier_rmse_  << " (The lower, the better)"<< std::endl;
+    draw_registration_result(*source, *target, reg_p2p.transformation_);
+
+
+    std::cout << "--------------------------------------------------" << std::endl;
+    std::cout << "P-t-P ICP with 2000 iterations:" << std::endl;
+    reg_p2p = open3d::pipelines::registration::RegistrationICP(*source, *target, threshold,
+                trans_init, open3d::pipelines::registration::TransformationEstimationPointToPoint(),
+                open3d::pipelines::registration::ICPConvergenceCriteria(0, 0, 2000));
+    evaluation = open3d::pipelines::registration::EvaluateRegistration(*source, *target, threshold, reg_p2p.transformation_);
+    std::cout << "  fitness: " << evaluation.fitness_  << " (The higher, the better)"<< std::endl;
+    std::cout << "  inlier_rms: " << evaluation.inlier_rmse_  << " (The lower, the better)"<< std::endl;
+    draw_registration_result(*source, *target, reg_p2p.transformation_);
+
+
+    std::cout << "--------------------------------------------------" << std::endl;
+    std::cout << "point-to-plane ICP:" << std::endl;
+    reg_p2p = open3d::pipelines::registration::RegistrationICP(*source, *target, threshold,
+                trans_init, open3d::pipelines::registration::TransformationEstimationPointToPlane());
+    evaluation = open3d::pipelines::registration::EvaluateRegistration(*source, *target, threshold, reg_p2p.transformation_);
+    std::cout << "  fitness: " << evaluation.fitness_  << " (The higher, the better)"<< std::endl;
+    std::cout << "  inlier_rms: " << evaluation.inlier_rmse_  << " (The lower, the better)"<< std::endl;
+    draw_registration_result(*source, *target, reg_p2p.transformation_);
     return 0; 
 }
