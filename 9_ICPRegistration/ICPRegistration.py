@@ -19,6 +19,7 @@ def draw_registration_result(source, target, transformation):
                                       lookat=[1.6784, 2.0612, 1.4451],
                                       up=[-0.3402, -0.9189, -0.1996])
 
+
 source = o3d.io.read_point_cloud("../test_data/ICP/cloud_bin_0.pcd")
 target = o3d.io.read_point_cloud("../test_data/ICP/cloud_bin_1.pcd")
 threshold = 0.02
