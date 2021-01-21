@@ -28,6 +28,7 @@ int main(int argc, char* argv[])
     source = open3d::io::CreatePointCloudFromFile("../../test_data/ICP/cloud_bin_0.pcd");
     auto target = std::make_shared<open3d::geometry::PointCloud>();
     target = open3d::io::CreatePointCloudFromFile("../../test_data/ICP/cloud_bin_1.pcd");
+    double threshold = 0.02;
     
     // Manually set the transformation matrix
     Eigen::Matrix4d trans_init;
@@ -38,7 +39,6 @@ int main(int argc, char* argv[])
     // std::cout << "Trans_init:" << '\n' << trans_init << std::endl;
     std::cout << "Initial alignment: " << std::endl;
     draw_registration_result(*source, *target, trans_init);
-    double threshold = 0.02;
     auto evaluation = open3d::pipelines::registration::EvaluateRegistration(*source, *target, threshold, trans_init);
     std::cout << "  fitness: " << evaluation.fitness_  << " (The higher, the better)"<< std::endl;
     std::cout << "  inlier_rms: " << evaluation.inlier_rmse_  << " (The lower, the better)"<< std::endl;
