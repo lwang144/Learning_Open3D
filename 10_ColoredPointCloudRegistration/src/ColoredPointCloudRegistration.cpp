@@ -15,8 +15,6 @@ void draw_registration_result(const open3d::geometry::PointCloud &source,
     std::shared_ptr<open3d::geometry::PointCloud> target_temp(new open3d::geometry::PointCloud);
     *source_temp = source;
     *target_temp = target;
-    //source_temp -> PaintUniformColor(Eigen::Vector3d(1, 0.706, 0));
-    //target_temp -> PaintUniformColor(Eigen::Vector3d(0, 0.651, 0.929));
     source_temp -> Transform(Transforamtion);
     open3d::visualization::DrawGeometries({source_temp, target_temp},
                                   "Registration result");
@@ -58,10 +56,15 @@ int main(int argc, char* argv[])
         auto target_down = target -> VoxelDownSample(radius);
 
         std::cout << "[3-2]. Estimate normal. " << radius << std::endl;
-        source_down -> EstimateNormals();
+        source_down -> EstimateNormals(open3d::geometry::KDTreeSearchParamHybrid(radius*2.0, 30));
+        target_down -> EstimateNormals(open3d::geometry::KDTreeSearchParamHybrid(radius*2.0, 30));
+
+        std::cout << "[3-3]. Applying colored point cloud registration" << std::endl;
+        auto result_ICP = open3d::pipelines::registration::RegistrationColoredICP(
+            source_down, target_down, radius, trans_init, 
+            open3d::pipelines::registration::TransformationEstimationForColoredICP(),
+            open3d::pipelines::registration::ICPConvergenceCriteria(1e-6, 1e-6, iter)
+        );
     }
-    
-    
-    
     return 0;
 }
