@@ -3,6 +3,7 @@
 #include <thread>
 #include <random>
 #include <cstdlib>
+#include <chrono>
 
 #include <Eigen/Dense>
 
@@ -41,7 +42,7 @@ auto global_registration(const open3d::geometry::PointCloud &source_down,
                                  const open3d::pipelines::registration::Feature &source_fpfh,
                                  const open3d::pipelines::registration::Feature &target_fpfh, double voxel_size){
     double distance_threshold = voxel_size * 1.5;
-    open3d::utility::LogInfo("RANSAC registration on downsampled point clouds");
+    open3d::utility::LogInfo("Global Registration :: RANSAC registration on downsampled point clouds");
     // Prepare RANSAC checker
     std::vector<std::reference_wrapper<const open3d::pipelines::registration::CorrespondenceChecker>> correspondence_checker;
     auto correspondence_checker_edge_length = open3d::pipelines::registration::CorrespondenceCheckerBasedOnEdgeLength(0.9);
@@ -67,6 +68,13 @@ auto refine_registration(const open3d::geometry::PointCloud &source,
     return refine_result;
 }
 
+double timer_cal(const std::chrono::_V2::system_clock::time_point &start_time){
+    auto end_time = std::chrono::system_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time);
+    double time_passed = (double) duration.count() * std::chrono::microseconds::period::num / std::chrono::microseconds::period::den;
+    return time_passed;
+}
+
 int main(int argc, char* argv[]) 
 {
     auto source = std::make_shared<open3d::geometry::PointCloud>();
@@ -79,7 +87,7 @@ int main(int argc, char* argv[])
                   1.0, 0.0, 0.0, 0.0,
                   0.0, 1.0, 0.0, 0.0,
                   0.0, 0.0, 0.0, 1.0;
-    std::cout << "Trans_init:" << trans_init << std::endl;
+    std::cout << "Trans_init:" << '\n' << trans_init << std::endl;
     draw_registration_result(*source, *target, trans_init);
 
     double voxel_size = 0.05; // Mean 5 cm for this dataset
@@ -89,7 +97,10 @@ int main(int argc, char* argv[])
     std::tie(target_down, target_fpfh) = preprocess_point_cloud(*target, voxel_size);
 
     //----- RANSAC -----//
+    auto start_RANSAC = std::chrono::system_clock::now();   // Calculate RANSAC time
     auto RANSAC_result = global_registration(*source_down, *target_down, *source_fpfh, *target_fpfh, voxel_size);
+    double time_RANSAC = timer_cal(start_RANSAC);
+    std::cout << "              --RANSAC time: " << time_RANSAC << " sec."<< std::endl;
     draw_registration_result(*source, *target, RANSAC_result.transformation_);
 
     //----- Local Refinement -----//

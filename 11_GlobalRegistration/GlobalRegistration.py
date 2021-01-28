@@ -66,20 +66,17 @@ def execute_global_registration(source_down, target_down, source_fpfh,
         source_down, target_down, source_fpfh, target_fpfh, True,
         distance_threshold,
         o3d.pipelines.registration.TransformationEstimationPointToPoint(False),
-        3, [
-            o3d.pipelines.registration.CorrespondenceCheckerBasedOnEdgeLength(
-                0.9),
-            o3d.pipelines.registration.CorrespondenceCheckerBasedOnDistance(
-                distance_threshold)
-        ], o3d.pipelines.registration.RANSACConvergenceCriteria(100000, 0.999))
+        3, [o3d.pipelines.registration.CorrespondenceCheckerBasedOnEdgeLength(0.9),
+            o3d.pipelines.registration.CorrespondenceCheckerBasedOnDistance(distance_threshold)], 
+            o3d.pipelines.registration.RANSACConvergenceCriteria(100000, 0.999))
     return result
 
 result_ransac = execute_global_registration(source_down, target_down,
-                                            source_fpfh, target_fpfh,
-                                            voxel_size)
-print(result_ransac)
+                                            source_fpfh, target_fpfh, voxel_size)
+#print(result_ransac)
 draw_registration_result(source_down, target_down, result_ransac.transformation)
 
+'''
 def refine_registration(source, target, source_fpfh, target_fpfh, voxel_size, result_ransac):
     distance_threshold = voxel_size * 0.4
     print(":: Point-to-plane ICP registration is applied on original point")
@@ -94,3 +91,4 @@ result_icp = refine_registration(source, target, source_fpfh, target_fpfh,
                                  voxel_size, result_ransac)
 print(result_icp)
 draw_registration_result(source, target, result_icp.transformation)
+'''
