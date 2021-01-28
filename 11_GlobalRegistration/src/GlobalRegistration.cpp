@@ -36,6 +36,37 @@ auto preprocess_point_cloud(const open3d::geometry::PointCloud &pcd,
     return std::make_tuple(pcd_down, pcd_fpfh);
 }
 
+auto global_registration(const open3d::geometry::PointCloud &source_down,
+                                 const open3d::geometry::PointCloud &target_down,
+                                 const open3d::pipelines::registration::Feature &source_fpfh,
+                                 const open3d::pipelines::registration::Feature &target_fpfh, double voxel_size){
+    double distance_threshold = voxel_size * 1.5;
+    open3d::utility::LogInfo("RANSAC registration on downsampled point clouds");
+    // Prepare RANSAC checker
+    std::vector<std::reference_wrapper<const open3d::pipelines::registration::CorrespondenceChecker>> correspondence_checker;
+    auto correspondence_checker_edge_length = open3d::pipelines::registration::CorrespondenceCheckerBasedOnEdgeLength(0.9);
+    auto correspondence_checker_distance = open3d::pipelines::registration::CorrespondenceCheckerBasedOnDistance(distance_threshold);
+    correspondence_checker.push_back(correspondence_checker_edge_length);
+    correspondence_checker.push_back(correspondence_checker_distance);
+    auto RANSAC_result = open3d::pipelines::registration::RegistrationRANSACBasedOnFeatureMatching(source_down, 
+                         target_down, source_fpfh, target_fpfh, true, distance_threshold, 
+                         open3d::pipelines::registration::TransformationEstimationPointToPoint(false), 3,
+                         correspondence_checker, open3d::pipelines::registration::RANSACConvergenceCriteria(100000, 0.999));
+    return RANSAC_result;
+}
+
+auto refine_registration(const open3d::geometry::PointCloud &source,
+                         const open3d::geometry::PointCloud &target,
+                         const open3d::pipelines::registration::Feature &source_fpfh,
+                         const open3d::pipelines::registration::Feature &target_fpfh, double voxel_size,
+                         const open3d::pipelines::registration::RegistrationResult &RANSAC_result){
+    double distance_threshold = voxel_size * 0.4;
+    open3d::utility::LogInfo("Local Refinement :: Point-to-plane ICP registration is applied on original point");
+    auto refine_result = open3d::pipelines::registration::RegistrationICP(source, target, distance_threshold, RANSAC_result.transformation_,
+                                                                    open3d::pipelines::registration::TransformationEstimationPointToPlane());
+    return refine_result;
+}
+
 int main(int argc, char* argv[]) 
 {
     auto source = std::make_shared<open3d::geometry::PointCloud>();
@@ -58,20 +89,11 @@ int main(int argc, char* argv[])
     std::tie(target_down, target_fpfh) = preprocess_point_cloud(*target, voxel_size);
 
     //----- RANSAC -----//
-    double distance_threshold = voxel_size * 1.5;
-    open3d::utility::LogInfo("RANSAC registration on downsampled point clouds");
-    // Prepare RANSAC checker
-    std::vector<std::reference_wrapper<const open3d::pipelines::registration::CorrespondenceChecker>> correspondence_checker;
-    auto correspondence_checker_edge_length = open3d::pipelines::registration::CorrespondenceCheckerBasedOnEdgeLength(0.9);
-    auto correspondence_checker_distance = open3d::pipelines::registration::CorrespondenceCheckerBasedOnDistance(distance_threshold);
-    correspondence_checker.push_back(correspondence_checker_edge_length);
-    correspondence_checker.push_back(correspondence_checker_distance);
-    
-    // auto result = open3d::pipelines::registration::RegistrationRANSACBasedOnFeatureMatching(*source_down, 
-    //                     *target_down, *source_fpfh, *target_fpfh, true, distance_threshold, 
-    //                     open3d::pipelines::registration::CorrespondenceCheckerBasedOnEdgeLength(0.9),
-    //                     open3d::pipelines::registration::CorrespondenceCheckerBasedOnDistance(distance_threshold),
-    //                     );
+    auto RANSAC_result = global_registration(*source_down, *target_down, *source_fpfh, *target_fpfh, voxel_size);
+    draw_registration_result(*source, *target, RANSAC_result.transformation_);
 
+    //----- Local Refinement -----//
+    auto refine_result = refine_registration(*source, *target, *source_fpfh, *target_fpfh, voxel_size, RANSAC_result);
+    draw_registration_result(*source, *target, refine_result.transformation_);
     return 0;
 }
