@@ -28,3 +28,6 @@
 10_ColoredPointCloudRegistration/build
 10_ColoredPointCloudRegistration/bin
 10_ColoredPointCloudRegistration/__pycache__
+11_GlobalRegistration/build
+11_GlobalRegistration/bin
+11_GlobalRegistration/__pycache__
