@@ -115,6 +115,8 @@ int main(int argc, char* argv[])
     std::cout << "              --RANSAC time: " << time_RANSAC << " sec."<< std::endl;
     draw_registration_result(*source, *target, RANSAC_result.transformation_);
 
+    //----- Fast global registration -----//
+
     //----- Local Refinement -----//
     auto refine_result = refine_registration(*source, *target, *source_fpfh, *target_fpfh, voxel_size, RANSAC_result);
     draw_registration_result(*source, *target, refine_result.transformation_);
