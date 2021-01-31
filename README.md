@@ -27,6 +27,7 @@ The examples included above are based on the tutorial from Open3D using both Pyt
 8. [**ISS Keypoints C++ Example**](https://github.com/LYON-WANG/Learning_Open3D/blob/master/7_ISSKeypoint/src/ISSKeypoint.cpp)
 9. [**ICP Registration C++ Example**](https://github.com/LYON-WANG/Learning_Open3D/blob/master/9_ICPRegistration/src/ICPRegistration.cpp)
 10. [**Global Registration C++ Example**](https://github.com/LYON-WANG/Learning_Open3D/blob/master/11_GlobalRegistration/src/GlobalRegistration.cpp)
+11. [**Multiway Registration C++ Example**](https://github.com/LYON-WANG/Learning_Open3D/blob/master/12_MultiwayRegistration/src/MultiwayRegistration.cpp)
 
 # Function Summary:
 1. [**Geometry: Point Cloud Common Function Summary(Python & C++)**](https://github.com/LYON-WANG/Learning_Open3D/blob/master/1_pointCloud/README.md)

@@ -77,7 +77,7 @@ with o3d.utility.VerbosityContextManager(
     pose_graph = full_registration(pcds_down,
                                    max_correspondence_distance_coarse,
                                    max_correspondence_distance_fine)
-'''
+
 print('\n')
 print("Optimizing PoseGraph ...")
 option = o3d.pipelines.registration.GlobalOptimizationOption(
@@ -115,4 +115,3 @@ o3d.visualization.draw_geometries([pcd_combined_down],
                                   front=[0.4257, -0.2125, -0.8795],
                                   lookat=[2.6172, 2.0475, 1.532],
                                   up=[-0.0694, -0.9768, 0.2024])
-'''
