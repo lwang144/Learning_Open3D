@@ -9,7 +9,7 @@
 
 #include "open3d/Open3D.h"
 
-// Load 3 point clouds form folder 'test_data/ICP'
+// Load 3 point clouds form folder 'test_data/ICP' 
 auto load_point_cloud(const double &voxel_size = 0.0){
     std::vector<std::shared_ptr<open3d::geometry::PointCloud>> PCDs;
     for(uint8_t i = 0; i < 3; i ++){
@@ -18,27 +18,73 @@ auto load_point_cloud(const double &voxel_size = 0.0){
         pcd = open3d::io::CreatePointCloudFromFile(filePath);
         auto pcd_down = pcd -> VoxelDownSample(voxel_size);
         PCDs.push_back(pcd_down);
-        open3d::utility::LogInfo("Load point cloud {:d}, down sample", i);
+        open3d::utility::LogInfo("Load point cloud {:d}, down sampling finished", i);
     }
     return PCDs;
 }
 
-auto pairwise_registration(const open3d::geometry::PointCloud &source,
-                           const open3d::geometry::PointCloud &target,
-                           const double max_correspondence_distance_coarse){
+auto pairwise_registration( const open3d::geometry::PointCloud &source,
+                            const open3d::geometry::PointCloud &target,
+                            const double max_correspondence_distance_coarse,
+                            const double max_correspondence_distance_fine){
     open3d::utility::LogInfo("Apply Point-to-plane ICP");
+    //----- Coarse registration -----//
     auto icp_coarse = open3d::pipelines::registration::RegistrationICP(source, target, max_correspondence_distance_coarse,
-                            Eigen::MatrixXd::Identity(4,4),open3d::pipelines::registration::TransformationEstimationPointToPlane());
-    auto icp_fine   = open3d::pipelines::registration::RegistrationICP();
-
+                            Eigen::MatrixXd::Identity(4,4), open3d::pipelines::registration::TransformationEstimationPointToPlane());
+    //----- Fine registration -----//
+    auto icp_fine   = open3d::pipelines::registration::RegistrationICP(source, target, max_correspondence_distance_fine,
+                            icp_coarse.transformation_, open3d::pipelines::registration::TransformationEstimationPointToPlane());
+    auto transformationICP = icp_fine.transformation_;
+    auto informationICP = open3d::pipelines::registration::GetInformationMatrixFromPointClouds(source, target, 
+                                        max_correspondence_distance_fine, icp_fine.transformation_);
+    return std::make_tuple(transformationICP, informationICP);
 }
 
-int main(int argc, char* argv[]) 
+auto full_registration( const std::vector<std::shared_ptr<open3d::geometry::PointCloud>> &PCDs,
+                        const double max_correspondence_distance_coarse,
+                        const double max_correspondence_distance_fine){
+    auto pose_graph = open3d::pipelines::registration::PoseGraph();
+    auto odomentry  = Eigen::MatrixXd::Identity(4,4);
+    pose_graph.nodes_.push_back(open3d::pipelines::registration::PoseGraphNode(odomentry));
+    for(int sourceID = 0; sourceID < PCDs.size(); sourceID ++){
+        for(int targetID = sourceID + 1; targetID < PCDs.size(); targetID ++){
+            Eigen::Matrix4d transformationICP; 
+            Eigen::Matrix6d_u informationICP;
+            std::tie(transformationICP, informationICP) = pairwise_registration(*PCDs[sourceID], *PCDs[targetID], 
+                                                            max_correspondence_distance_coarse, max_correspondence_distance_fine);
+            open3d::utility::LogInfo("Build open3d::pipelines::registration::PoseGraph");
+            if(targetID == sourceID + 1){
+                open3d::utility::LogInfo("[{:d}, {:d}], --Odomentry Edge", sourceID, targetID);
+                auto odomentry_temp = transformationICP.cwiseProduct(odomentry); // Dot product
+                pose_graph.nodes_.push_back(open3d::pipelines::registration::PoseGraphNode(odomentry_temp.inverse()));
+                pose_graph.edges_.push_back(open3d::pipelines::registration::PoseGraphEdge(sourceID, targetID, transformationICP,
+                                                                                            informationICP, false));
+            }
+            else{
+                open3d::utility::LogInfo("[{:d}, {:d}], --Loop Closure Edge", sourceID, targetID);
+                pose_graph.edges_.push_back(open3d::pipelines::registration::PoseGraphEdge(sourceID, targetID, transformationICP, informationICP, true));
+            }
+        }
+    }
+    return pose_graph;
+}
+
+int main() 
 {
+    //----- Prepare Point cloud -----//
     double voxel_size = 0.02;
-    auto PCD = load_point_cloud(voxel_size);
+    auto PCD_down = load_point_cloud(voxel_size);
+
+    //----- Full Registration -----//
+    open3d::utility::LogInfo("Full Registration ...");
+    double max_correspondence_distance_coarse = voxel_size * 15;
+    double max_correspondence_distance_fine = voxel_size * 1.5;
+    auto pose_graph = full_registration(PCD_down, max_correspondence_distance_coarse, max_correspondence_distance_fine);
+
+
     //open3d::visualization::DrawGeometries({PCD[2]}, "Registration result");
-    std::cout << Eigen::MatrixXf::Identity(4,4) << std::endl;
     
+
+
     return 0;
 }

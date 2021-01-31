@@ -77,7 +77,7 @@ with o3d.utility.VerbosityContextManager(
     pose_graph = full_registration(pcds_down,
                                    max_correspondence_distance_coarse,
                                    max_correspondence_distance_fine)
-
+'''
 print('\n')
 print("Optimizing PoseGraph ...")
 option = o3d.pipelines.registration.GlobalOptimizationOption(
@@ -92,3 +92,27 @@ with o3d.utility.VerbosityContextManager(
         o3d.pipelines.registration.GlobalOptimizationConvergenceCriteria(),
         option)
 
+print("Transform points and display")
+for point_id in range(len(pcds_down)):
+    print(pose_graph.nodes[point_id].pose)
+    pcds_down[point_id].transform(pose_graph.nodes[point_id].pose)
+o3d.visualization.draw_geometries(pcds_down,
+                                  zoom=0.3412,
+                                  front=[0.4257, -0.2125, -0.8795],
+                                  lookat=[2.6172, 2.0475, 1.532],
+                                  up=[-0.0694, -0.9768, 0.2024])
+
+
+pcds = load_point_clouds(voxel_size)
+pcd_combined = o3d.geometry.PointCloud()
+for point_id in range(len(pcds)):
+    pcds[point_id].transform(pose_graph.nodes[point_id].pose)
+    pcd_combined += pcds[point_id]
+pcd_combined_down = pcd_combined.voxel_down_sample(voxel_size=voxel_size)
+o3d.io.write_point_cloud("multiway_registration.pcd", pcd_combined_down)
+o3d.visualization.draw_geometries([pcd_combined_down],
+                                  zoom=0.3412,
+                                  front=[0.4257, -0.2125, -0.8795],
+                                  lookat=[2.6172, 2.0475, 1.532],
+                                  up=[-0.0694, -0.9768, 0.2024])
+'''
