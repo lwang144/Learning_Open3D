@@ -68,18 +68,6 @@ auto refine_registration(const open3d::geometry::PointCloud &source,
     return refine_result;
 }
 
-auto fast_global_registration(const open3d::geometry::PointCloud &source_down,
-                         const open3d::geometry::PointCloud &target_down,
-                         const open3d::pipelines::registration::Feature &source_fpfh,
-                         const open3d::pipelines::registration::Feature &target_fpfh, double voxel_size){
-    double distance_threshold = voxel_size * 0.5;
-    open3d::utility::LogInfo("Global Registration :: Apply fast global registration with distance threshold");
-    auto result = open3d::pipelines::registration::RegistrationRANSACBasedOnFeatureMatching(source_down,
-                    target_down, source_fpfh, target_fpfh, 
-                    open3d::pipelines::registration::FastGlobalRegistrationOption::FastGlobalRegistrationOption(NULL, NULL, NULL, distance_threshold));
-    return result;
-}
-
 double timer_cal(const std::chrono::_V2::system_clock::time_point &start_time){
     auto end_time = std::chrono::system_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time);
@@ -114,8 +102,6 @@ int main(int argc, char* argv[])
     double time_RANSAC = timer_cal(start_RANSAC);   // Calculate RANSAC time
     std::cout << "              --RANSAC time: " << time_RANSAC << " sec."<< std::endl;
     draw_registration_result(*source, *target, RANSAC_result.transformation_);
-
-    //----- Fast global registration -----//
 
     //----- Local Refinement -----//
     auto refine_result = refine_registration(*source, *target, *source_fpfh, *target_fpfh, voxel_size, RANSAC_result);

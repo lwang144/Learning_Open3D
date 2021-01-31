@@ -1,11 +1,9 @@
-# Global Registration
-Global registration: RANSAC
-
-Refinement: PCL point to plane
+# Multiway Registration
+Input is a set pf geometries, such as Point Clouds or RGB-D images ![](http://latex.codecogs.com/gif.latex?\\\left{ P_i\\right})
 
 The examples included above are based on the tutorial from Open3D using both Python and C++. Hope this can help you! 
 
-[**C++ Examples**](https://github.com/LYON-WANG/Learning_Open3D/blob/master/11_GlobalRegistration/src/GlobalRegistration.cpp)
+[**C++ Examples**]()
 
 [**Python Examples**]()
 
@@ -16,7 +14,7 @@ The examples included above are based on the tutorial from Open3D using both Pyt
   cmake ..
   make
   cd ../bin
-  ./ColoredPointCloudRegistration
+  ./MultiwayRegistration
 ```
 
 ## Common Function Summary:

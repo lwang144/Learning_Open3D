@@ -24,6 +24,7 @@ The examples included above are based on the tutorial from Open3D using both Pyt
 5. [**Poisson surface reconstruction C++ Example**](https://github.com/LYON-WANG/Learning_Open3D/blob/master/5_SurfaceReconstruction/src/PoissonReconstruction.cpp)
 6. [**Transformation C++ Example**](https://github.com/LYON-WANG/Learning_Open3D/blob/master/6_Transformation/src/Transformation.cpp)
 7. [**ISS Keypoints C++ Example**](https://github.com/LYON-WANG/Learning_Open3D/blob/master/7_ISSKeypoint/src/ISSKeypoint.cpp)
+8. [**Global Registration C++ Example**](https://github.com/LYON-WANG/Learning_Open3D/blob/master/11_GlobalRegistration/src/GlobalRegistration.cpp)
 
 # Function Summary:
 1. [**Geometry: Point Cloud Common Function Summary(Python & C++)**](https://github.com/LYON-WANG/Learning_Open3D/blob/master/1_pointCloud/README.md)
