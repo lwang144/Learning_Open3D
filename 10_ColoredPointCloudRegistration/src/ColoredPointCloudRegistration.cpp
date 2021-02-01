@@ -7,6 +7,7 @@
 #include <Eigen/Dense>
 
 #include "open3d/Open3D.h"
+#include "open3d/pipelines/registration/ColoredICP.h"
 
 void draw_registration_result(const open3d::geometry::PointCloud &source,
                               const open3d::geometry::PointCloud &target,
@@ -46,6 +47,8 @@ int main(int argc, char* argv[])
     std::cout << "[3] Colored pointcloud registration" << std::endl;
     double voxel_radius[3] = {0.04, 0.02, 0.01};
     int max_iter[3] = {50, 30, 14};
+    Eigen::Matrix4d_u current_transformation = Eigen::MatrixXd::Identity(4,4);
+    open3d::pipelines::registration::RegistrationResult Result_ICP;
     for(int i=0; i < 3; i++){
         int iter = max_iter[i];
         double radius = voxel_radius[i];
@@ -55,16 +58,21 @@ int main(int argc, char* argv[])
         auto source_down = source -> VoxelDownSample(radius);
         auto target_down = target -> VoxelDownSample(radius);
 
-        std::cout << "[3-2]. Estimate normal. " << radius << std::endl;
+        std::cout << "[3-2]. Estimate normal. " << std::endl;
         source_down -> EstimateNormals(open3d::geometry::KDTreeSearchParamHybrid(radius*2.0, 30));
         target_down -> EstimateNormals(open3d::geometry::KDTreeSearchParamHybrid(radius*2.0, 30));
 
         std::cout << "[3-3]. Applying colored point cloud registration" << std::endl;
-        auto result_ICP = open3d::pipelines::registration::RegistrationColoredICP(
-            source_down, target_down, radius, trans_init, 
-            open3d::pipelines::registration::TransformationEstimationForColoredICP(),
-            open3d::pipelines::registration::ICPConvergenceCriteria(1e-6, 1e-6, iter)
-        );
+        Result_ICP = open3d::pipelines::registration::RegistrationColoredICP(
+                            *source_down, *target_down, radius, current_transformation, 
+                            open3d::pipelines::registration::TransformationEstimationForColoredICP(),
+                            open3d::pipelines::registration::ICPConvergenceCriteria(1e-6, 1e-6, iter));
+        current_transformation = Result_ICP.transformation_;
+        evaluation = open3d::pipelines::registration::EvaluateRegistration(*source, *target, 0.02, Result_ICP.transformation_);
+        std::cout << "  fitness: " << evaluation.fitness_  << " (The higher, the better)"<< std::endl;
+        std::cout << "  inlier_rms: " << evaluation.inlier_rmse_  << " (The lower, the better)"<< std::endl;
+        std::cout << "------" << std::endl;
     }
+    draw_registration_result(*source, *target, Result_ICP.transformation_);
     return 0;
 }
