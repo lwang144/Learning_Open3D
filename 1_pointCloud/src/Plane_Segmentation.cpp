@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
     std::shared_ptr<open3d::geometry::PointCloud> inPC = cloud_ptr -> SelectByIndex(selectedIndex, false);
 	const Eigen::Vector3d colorIn = {1,0,0};
 	inPC->PaintUniformColor(colorIn);
-    // Paint inliers black
+    // Paint outliers black
 	std::shared_ptr<open3d::geometry::PointCloud> outPC = cloud_ptr -> SelectByIndex(selectedIndex, true);
 	const Eigen::Vector3d colorOut = { 0,0,0 };
 	outPC->PaintUniformColor(colorOut);

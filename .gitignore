@@ -37,3 +37,7 @@
 13_RGBDIntegration/build
 13_RGBDIntegration/bin
 13_RGBDIntegration/__pycache__
+
+RoadDataTest/build
+RoadDataTest/bin
+RoadDataTest/__pycache__
