@@ -16,14 +16,13 @@ int main(){
     int16_t fileNum = 0;
     std::vector<std::string> filePaths;
     std::tie(filePaths, fileNum) = fileSYS(folderPath);
-    for(int i = 0; i < filePaths.size(); i ++){
-        std::cout << filePaths[i] << std::endl;
-    }
-
+    // for(int i = 0; i < filePaths.size(); i ++){
+    //     std::cout << filePaths[i] << std::endl;
+    // } // For test
     int16_t NUM = 0;
     // Loop through all files
     while(NUM != fileNum){
-        //loadPCD(filePath, NUM);
+        //loadPCD(filePaths, NUM);
         NUM ++;
     }
     return 0;

@@ -1,12 +1,12 @@
 #include "processPCD.h"
 
-auto loadPCD(const std::string &filePath, const int16_t &NUM){
-    std::string file = filePath + std::to_string(NUM) + ".pcd";
+auto loadPCD(const std::vector<std::string> &filePaths, const int16_t &NUM){
+    //std::string file = filePath + std::to_string(NUM) + ".pcd";
     std::shared_ptr<open3d::geometry::PointCloud> pcd;
-    //pcd = open3d::io::CreatePointCloudFromFile("../multiway_registration.pcd");
+    pcd = open3d::io::CreatePointCloudFromFile(filePaths[NUM]);
     //pcd = open3d::io::CreatePointCloudFromFile("../data/0.pcd");
-    open3d::utility::LogInfo("Load point cloud ...");
-    std::cout << file << std::endl;
+    //open3d::utility::LogInfo("Load point cloud ...");
+    //std::cout << file << std::endl;
 }
 
 std::vector<size_t> plane_segmentation(const std::shared_ptr<open3d::geometry::PointCloud> &pcd,
