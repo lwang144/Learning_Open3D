@@ -1,23 +1,28 @@
 #include "processPCD.h"
 
-int16_t fileCount(const std::string &filePath){
-    // Count the total number of files in the path
+auto fileSYS(const std::string &folderPath = "../data/data_2"){
+    // Count the total number of files in the path and return the path of all files.
+    std::vector<std::string> filePaths; 
     DIR *path;
-    int16_t count = 0;
     struct dirent *ep;
-    char path_array[(int) filePath.length() + 1];
-    strcpy(path_array, filePath.c_str());
+    char path_array[(int) folderPath.length() + 1];
+    strcpy(path_array, folderPath.c_str());
     path = opendir(path_array);
+    int16_t count = 0;
     if(path != NULL){
-        while(ep = readdir(path))
+        while(ep = readdir(path)){
+            if(!ep -> d_name || ep -> d_name[0] == '.')
+                continue;
+            filePaths.push_back(folderPath + ep -> d_name);
             count ++;
+        }
         (void) closedir(path);
+        std::sort(filePaths.begin(), filePaths.end());
     }
     else
         perror("Couldn't open the directory...");
-    count -= 2;
-    std::cout << "File number in [" << filePath << "] : " << count << std::endl;
-    return count;
+    std::cout << "Found " << count << " files in folder [" << folderPath << "]."<< std::endl;
+    return std::make_tuple(filePaths, count);
 }
 
 double timer_cal(const std::chrono::_V2::system_clock::time_point &start_time){

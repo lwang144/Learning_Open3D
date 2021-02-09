@@ -9,14 +9,21 @@
  */
 #include "processPCD.h"
 #include "supportFunction.cpp"
+#include "processPCD.cpp"
 
 int main(){
-    std::string filePath = "../data/data_2";
-    auto fileNum = fileCount(filePath);
-    int NUM = 0;
+    std::string folderPath = "../data/data_2/";
+    int16_t fileNum = 0;
+    std::vector<std::string> filePaths;
+    std::tie(filePaths, fileNum) = fileSYS(folderPath);
+    for(int i = 0; i < filePaths.size(); i ++){
+        std::cout << filePaths[i] << std::endl;
+    }
+
+    int16_t NUM = 0;
     // Loop through all files
     while(NUM != fileNum){
-
+        //loadPCD(filePath, NUM);
         NUM ++;
     }
     return 0;
