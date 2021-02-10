@@ -1,6 +1,7 @@
 #include "processPCD.h"
+/*Supporting functions*/
 
-auto fileSYS(const std::string &folderPath = "../data/data_2"){
+auto fileSystem(const std::string &folderPath = "../data/data_2"){
     // Count the total number of files in the path and return the path of all files.
     std::vector<std::string> filePaths; 
     DIR *path;
