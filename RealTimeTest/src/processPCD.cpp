@@ -1,8 +1,9 @@
 #include "processPCD.h"
 /* Point cloud processing using Open3D */
 
-std::shared_ptr<open3d::geometry::PointCloud> loadPCD(const std::vector<std::string> &filePaths, 
-                                                      const int16_t &NUM){
+std::shared_ptr<open3d::geometry::PointCloud> 
+loadPCD(const std::vector<std::string> &filePaths, 
+        const int16_t &NUM){
     // Load .pcd file
     //std::string file = filePath + std::to_string(NUM) + ".pcd";
     std::shared_ptr<open3d::geometry::PointCloud> pcd;
@@ -49,3 +50,17 @@ std::vector<size_t> plane_segmentation( const std::shared_ptr<open3d::geometry::
     return selectedIndex;
 }
 
+std::vector<std::shared_ptr<open3d::geometry::AxisAlignedBoundingBox>>
+objectBoundingBox(const std::shared_ptr<open3d::geometry::PointCloud> &PCD,
+                     const std::vector<std::vector<size_t>> &indices){
+    std::vector<std::shared_ptr<open3d::geometry::AxisAlignedBoundingBox>> boxes;
+    std::cout << "bounding indices: " << indices.size() << std::endl;
+    for(int i = 0; i < indices.size(); i++){
+        std::shared_ptr<open3d::geometry::AxisAlignedBoundingBox> object_box(new open3d::geometry::AxisAlignedBoundingBox);
+        auto object_temp = PCD -> SelectByIndex(indices[i]);
+        *object_box = object_temp -> GetAxisAlignedBoundingBox(); // Get bounding box
+        object_box -> color_ = Eigen::Vector3d(1, 0, 0);
+        boxes.push_back(object_box);
+    }
+    return boxes;
+}

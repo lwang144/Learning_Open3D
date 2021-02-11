@@ -15,6 +15,14 @@ int main(){
     open3d::visualization::Visualizer visualizer;
     visualizer.CreateVisualizerWindow("Test", 1600, 900);
     visualizer.GetRenderOption().point_size_ = 2;
+    //visualizer.GetViewControl().SetZoom(2.0);
+    Eigen::Matrix4d initCam;
+    initCam <<  6,0,0,0,
+                0,1,0,0,
+                0,0,1,0,
+                0,0,0,1;
+    std::cout << initCam << std::endl;
+    visualizer.GetViewControl().SetViewMatrices(initCam);
     
     // Load all files in the file path
     std::string folderPath = "../data/data_2/";
@@ -26,7 +34,9 @@ int main(){
     // Loop through all files
     int16_t NUM = 0;
     while(NUM != fileNum){
+        // Load .pcd file
         auto PCD = loadPCD(filePaths, NUM);
+
         // Filter point cloud with Region of Interest
         std::shared_ptr<open3d::geometry::PointCloud> ROI_PCD;
         std::shared_ptr<open3d::geometry::AxisAlignedBoundingBox> ROI_BOX;
