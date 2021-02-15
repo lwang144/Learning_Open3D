@@ -155,7 +155,7 @@ int main(){
     visualizer.AddGeometry(PCD_Clustering);
     visualizer.AddGeometry(plane);
     visualizer.AddGeometry(axis);
-    //visualizer.AddGeometry(ROI_box);
+    visualizer.AddGeometry(ROI_box);
     visualizer.Run();
     visualizer.DestroyVisualizerWindow();
     return 0;

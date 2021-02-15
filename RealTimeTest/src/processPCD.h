@@ -24,5 +24,6 @@
 #include "open3d/Open3D.h"
 #include "open3d/pipelines/registration/GlobalOptimization.h"
 #include "open3d/geometry/BoundingVolume.h"
+#include "open3d/visualization/visualizer/O3DVisualizer.h"
 
 #endif /* PROCESSPCD_H_ */

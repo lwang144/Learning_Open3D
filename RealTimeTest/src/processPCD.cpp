@@ -27,6 +27,23 @@ OutlierRemoval( const std::shared_ptr<open3d::geometry::PointCloud> &pcd,
     return std::make_tuple(inlier_cloud, outlier_cloud);
 }
 
+std::tuple<std::shared_ptr<open3d::geometry::PointCloud>, std::shared_ptr<open3d::pipelines::registration::Feature>> 
+preProcess(const open3d::geometry::PointCloud &pcd,
+                            const double &voxel_size){
+    open3d::utility::LogInfo("Preprocess :: Downsampling");
+    std::shared_ptr<open3d::geometry::PointCloud> pcd_temp(new open3d::geometry::PointCloud);
+    *pcd_temp = pcd;
+    auto pcd_down = pcd_temp -> VoxelDownSample(voxel_size);
+    open3d::utility::LogInfo("Preprocess :: Estimate normal");
+    double radius_normal = voxel_size * 2;
+    pcd_down -> EstimateNormals(open3d::geometry::KDTreeSearchParamHybrid(radius_normal, 30));
+    double radius_feature = voxel_size * 5;
+    open3d::utility::LogInfo("Preprocess :: Estimate normal");
+    auto pcd_fpfh = open3d::pipelines::registration::ComputeFPFHFeature(*pcd_down,
+                        open3d::geometry::KDTreeSearchParamHybrid(radius_feature, 100));
+    return std::make_tuple(pcd_down, pcd_fpfh);
+}
+
 std::tuple<std::shared_ptr<open3d::geometry::PointCloud>, std::shared_ptr<open3d::geometry::AxisAlignedBoundingBox>> 
 ROICrop(const std::shared_ptr<open3d::geometry::PointCloud> &PCD,
         const Eigen::Vector3d &minBound, 
@@ -37,7 +54,8 @@ ROICrop(const std::shared_ptr<open3d::geometry::PointCloud> &PCD,
     return std::make_tuple(ROI, ROI_box);
 }
 
-std::vector<size_t> plane_segmentation( const std::shared_ptr<open3d::geometry::PointCloud> &pcd,
+std::tuple<std::shared_ptr<open3d::geometry::PointCloud>, std::shared_ptr<open3d::geometry::PointCloud>, std::vector<size_t>>
+planeSegmentation( const std::shared_ptr<open3d::geometry::PointCloud> &pcd,
                                         const double &distance_threshold = 0.2, 
                                         const int &ransac_n = 3,
                                         const int &num_iterations = 100){
@@ -45,9 +63,10 @@ std::vector<size_t> plane_segmentation( const std::shared_ptr<open3d::geometry::
                     pcd -> SegmentPlane(distance_threshold, ransac_n, num_iterations); // Return plane model and inliers
     // [a b c d] plane model
 	Eigen::Vector4d para = std::get<0>(vRes);
+    std::cout << "Plane equation: " << para[0] << "x + " << para[1] << "y + " << para[2] << "z + " << para[3] << " = 0" << std::endl;
     // Inliers
     std::vector<size_t> selectedIndex = std::get<1>(vRes);
-    return selectedIndex;
+    return std::make_tuple(pcd -> SelectByIndex(selectedIndex, false), pcd -> SelectByIndex(selectedIndex, true), selectedIndex);
 }
 
 std::vector<std::shared_ptr<open3d::geometry::AxisAlignedBoundingBox>>
