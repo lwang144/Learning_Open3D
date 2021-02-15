@@ -59,7 +59,7 @@ int main(){
         auto ROI_inlier = OutlierRemoval(ROI_PCD, 30, 1.0);
         std::shared_ptr<open3d::geometry::PointCloud> PCD_Clustering;
         std::vector<std::vector<size_t>> PCDindices;
-        std::tie(PCD_Clustering, PCDindices) = DBSCANclustering(ROI_inlier, 0.5, 15);
+        std::tie(PCD_Clustering, PCDindices) = DBSCANclustering(ROI_inlier, 0.6, 25);
 
         // Draw Bounding boxes
         auto ObjectBoxes = objectBoundingBox(PCD_Clustering, PCDindices);
@@ -70,11 +70,11 @@ int main(){
         }
         visualizer.AddGeometry(Plane);
         visualizer.AddGeometry(PCD_noStreet);
-        visualizer.AddGeometry(ROI_BOX);
+        //visualizer.AddGeometry(ROI_BOX);
         visualizer.AddGeometry(axis);
         open3d::visualization::ViewControl &view_control = visualizer.GetViewControl();
         //view_control.SetFront(Eigen::Vector3d(0, -1, 0));
-        view_control.SetZoom(0.2);
+        view_control.SetZoom(0.15);
         visualizer.PollEvents();
         visualizer.ClearGeometries();
         std::this_thread::sleep_for(std::chrono::milliseconds(50));
