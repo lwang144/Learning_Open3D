@@ -18,6 +18,12 @@ find_package(Open3D REQUIRED)
 # link_directories must be before add_executable
 link_directories(${Open3D_LIBRARY_DIRS})
 
+# FInd and include PCL
+find_package(PCL REQUIRED)
+# link_directories must be before add_executable
+include_directories(${PCL_INCLUDE_DIRS})
+link_directories(${PCL_LIBRARY_DIRS})
+
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${Open3D_C_FLAGS}")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Open3D_CXX_FLAGS}")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${Open3D_EXE_LINKER_FLAGS}")

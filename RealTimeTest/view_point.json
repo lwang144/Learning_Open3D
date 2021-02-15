@@ -21,7 +21,7 @@
 	],
 	"intrinsic" : 
 	{
-		"height" : 768,
+		"height" : 900,
 		"intrinsic_matrix" : 
 		[
 			665.1075101064489,
@@ -34,7 +34,7 @@
 			383.5,
 			1.0
 		],
-		"width" : 1024
+		"width" : 1600
 	},
 	"version_major" : 1,
 	"version_minor" : 0

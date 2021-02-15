@@ -21,9 +21,13 @@
 
 #include <Eigen/Dense>
 
+// Open3D
 #include "open3d/Open3D.h"
 #include "open3d/pipelines/registration/GlobalOptimization.h"
 #include "open3d/geometry/BoundingVolume.h"
-#include "open3d/visualization/visualizer/O3DVisualizer.h"
+#include "open3d/visualization/visualizer/ViewControl.h"
+
+// PCL
+//#include <pcl/point_cloud.h>
 
 #endif /* PROCESSPCD_H_ */
