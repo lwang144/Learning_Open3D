@@ -17,7 +17,7 @@ int main(){
     visualizer.GetRenderOption().point_size_ = 2;
 
     // Load all files in the file path
-    std::string folderPath = "../data/data_1/";
+    std::string folderPath = "../data/data_2/";
     int16_t fileNum;
     std::vector<std::string> filePaths;
     std::tie(filePaths, fileNum) = fileSystem(folderPath);
@@ -51,8 +51,8 @@ int main(){
         // Filter point cloud with Region of Interest (ROI)
         std::shared_ptr<open3d::geometry::PointCloud> ROI_PCD;
         std::shared_ptr<open3d::geometry::AxisAlignedBoundingBox> ROI_BOX;
-        const Eigen::Vector3d minBound(-40.0, -10.0, -3.0);
-        const Eigen::Vector3d maxBound(40.0, 10.0, 4.0);
+        const Eigen::Vector3d minBound(-40.0, -7.0, -3.0);
+        const Eigen::Vector3d maxBound(40.0, 7.0, 4.0);
         std::tie(ROI_PCD, ROI_BOX) = ROICrop(PCD_noStreet, minBound, maxBound);
 
         // Object Clustering
@@ -62,7 +62,8 @@ int main(){
         std::tie(PCD_Clustering, PCDindices) = DBSCANclustering(ROI_inlier, 0.6, 25);
 
         // Draw Bounding boxes
-        auto ObjectBoxes = objectBoundingBox(PCD_Clustering, PCDindices);
+        //auto ObjectBoxes = objectOrientedBoundingBox(PCD_Clustering, PCDindices);
+        auto ObjectBoxes = objectAxisAlignedBoundingBox(PCD_Clustering, PCDindices);
 
         // Visualize
         for(int i=0; i < ObjectBoxes.size(); i++){
@@ -73,8 +74,9 @@ int main(){
         //visualizer.AddGeometry(ROI_BOX);
         visualizer.AddGeometry(axis);
         open3d::visualization::ViewControl &view_control = visualizer.GetViewControl();
-        //view_control.SetFront(Eigen::Vector3d(0, -1, 0));
+        //view_control.SetFront(Eigen::Vector3d(-10, 0, 0));
         view_control.SetZoom(0.15);
+        //view_control.SetViewMatrices(Eigen::Vector4d(10, 0, 0, 0));
         visualizer.PollEvents();
         visualizer.ClearGeometries();
         std::this_thread::sleep_for(std::chrono::milliseconds(50));

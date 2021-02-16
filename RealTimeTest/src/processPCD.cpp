@@ -71,11 +71,12 @@ planeSegmentation( const std::shared_ptr<open3d::geometry::PointCloud> &pcd,
     return std::make_tuple(pcd -> SelectByIndex(selectedIndex, false), pcd -> SelectByIndex(selectedIndex, true), selectedIndex);
 }
 
-auto DBSCANclustering(const std::shared_ptr<open3d::geometry::PointCloud> &pcd,
+std::tuple<std::shared_ptr<open3d::geometry::PointCloud>, std::vector<std::vector<size_t>>>
+DBSCANclustering(const std::shared_ptr<open3d::geometry::PointCloud> &pcd,
                       const double &eps = 0.3,
                       const double &min_points = 10){
     // [Group local point cloud clusters together]
-    std::vector<int>labels = pcd -> ClusterDBSCAN(eps, min_points, true);
+    std::vector<int>labels = pcd -> ClusterDBSCAN(eps, min_points, false);
     int max_label = *max_element(labels.begin(),labels.end());
     open3d::utility::LogInfo("point cloud has {:d} clusters.", max_label+1);
     std::vector<Eigen::Vector3d> vColor; // Define color vector
@@ -119,7 +120,7 @@ auto DBSCANclustering(const std::shared_ptr<open3d::geometry::PointCloud> &pcd,
 }
 
 std::vector<std::shared_ptr<open3d::geometry::OrientedBoundingBox>>
-objectBoundingBox(const std::shared_ptr<open3d::geometry::PointCloud> &PCD,
+objectOrientedBoundingBox(const std::shared_ptr<open3d::geometry::PointCloud> &PCD,
                      const std::vector<std::vector<size_t>> &indices){
     std::vector<std::shared_ptr<open3d::geometry::OrientedBoundingBox>> boxes;
     std::cout << "bounding indices: " << indices.size() << std::endl;
@@ -127,6 +128,21 @@ objectBoundingBox(const std::shared_ptr<open3d::geometry::PointCloud> &PCD,
         std::shared_ptr<open3d::geometry::OrientedBoundingBox> object_box(new open3d::geometry::OrientedBoundingBox);
         auto object_temp = PCD -> SelectByIndex(indices[i]);
         *object_box = object_temp -> GetOrientedBoundingBox(); // Get bounding box
+        object_box -> color_ = Eigen::Vector3d(1, 0, 0);
+        boxes.push_back(object_box);
+    }
+    return boxes;
+}
+
+std::vector<std::shared_ptr<open3d::geometry::AxisAlignedBoundingBox>>
+objectAxisAlignedBoundingBox(const std::shared_ptr<open3d::geometry::PointCloud> &PCD,
+                     const std::vector<std::vector<size_t>> &indices){
+    std::vector<std::shared_ptr<open3d::geometry::AxisAlignedBoundingBox>> boxes;
+    std::cout << "bounding indices: " << indices.size() << std::endl;
+    for(int i = 0; i < indices.size(); i++){
+        std::shared_ptr<open3d::geometry::AxisAlignedBoundingBox> object_box(new open3d::geometry::AxisAlignedBoundingBox);
+        auto object_temp = PCD -> SelectByIndex(indices[i]);
+        *object_box = object_temp -> GetAxisAlignedBoundingBox(); // Get bounding box
         object_box -> color_ = Eigen::Vector3d(1, 0, 0);
         boxes.push_back(object_box);
     }
