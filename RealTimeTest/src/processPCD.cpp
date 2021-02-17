@@ -143,8 +143,12 @@ objectAxisAlignedBoundingBox(const std::shared_ptr<open3d::geometry::PointCloud>
         std::shared_ptr<open3d::geometry::AxisAlignedBoundingBox> object_box(new open3d::geometry::AxisAlignedBoundingBox);
         auto object_temp = PCD -> SelectByIndex(indices[i]);
         *object_box = object_temp -> GetAxisAlignedBoundingBox(); // Get bounding box
-        object_box -> color_ = Eigen::Vector3d(1, 0, 0);
-        boxes.push_back(object_box);
+        auto mmm = object_box -> max_bound_;
+        //std::cout << "[" << mmm[0] << ", " << mmm[1] << ", " << mmm[2] << "]" << std::endl;
+        if((object_box -> Volume() < 15) && (mmm[2] < 1)){
+            object_box -> color_ = Eigen::Vector3d(1, 0, 0);
+            boxes.push_back(object_box);
+        }
     }
     return boxes;
 }
