@@ -56,12 +56,14 @@ ROICrop(const std::shared_ptr<open3d::geometry::PointCloud> &PCD,
 }
 
 std::tuple<std::shared_ptr<open3d::geometry::PointCloud>, std::shared_ptr<open3d::geometry::PointCloud>, std::vector<size_t>>
-planeSegmentation( const std::shared_ptr<open3d::geometry::PointCloud> &pcd,
+RANSACplaneSegmentation( const std::shared_ptr<open3d::geometry::PointCloud> &pcd,
                                         const double &distance_threshold = 0.2, 
                                         const int &ransac_n = 3,
                                         const int &num_iterations = 100){
+    auto startTime = std::chrono::system_clock::now();
     std::tuple<Eigen::Vector4d, std::vector<size_t>> vRes = 
                     pcd -> SegmentPlane(distance_threshold, ransac_n, num_iterations); // Return plane model and inliers
+    std::cout << "RANSAC Plane segmentation took " << timer_cal(startTime) << "ms." << std::endl;
     // [a b c d] plane model
 	Eigen::Vector4d para = std::get<0>(vRes);
     //open3d::utility::LogInfo("Road Segmentation");
@@ -145,7 +147,7 @@ objectAxisAlignedBoundingBox(const std::shared_ptr<open3d::geometry::PointCloud>
         *object_box = object_temp -> GetAxisAlignedBoundingBox(); // Get bounding box
         auto mmm = object_box -> max_bound_;
         //std::cout << "[" << mmm[0] << ", " << mmm[1] << ", " << mmm[2] << "]" << std::endl;
-        if((object_box -> Volume() < 15) && (mmm[2] < 1)){
+        if(object_box -> Volume() < 15 && mmm[2] > -0.9 && mmm[2] < 0.5){
             object_box -> color_ = Eigen::Vector3d(1, 0, 0);
             boxes.push_back(object_box);
         }

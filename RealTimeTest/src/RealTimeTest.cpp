@@ -45,21 +45,23 @@ int main(){
         std::shared_ptr<open3d::geometry::PointCloud> Plane;
         std::shared_ptr<open3d::geometry::PointCloud> PCD_noStreet;
         std::vector<size_t> Plane_index;
-        std::tie(Plane, PCD_noStreet, Plane_index) = planeSegmentation(PCD_DOWN, 0.3, 3, 100);
+        std::tie(Plane, PCD_noStreet, Plane_index) = RANSACplaneSegmentation(PCD_DOWN, 0.3, 3, 100);
         Plane -> PaintUniformColor(Eigen::Vector3d(0, 1, 0));
 
         // Filter point cloud with Region of Interest (ROI)
         std::shared_ptr<open3d::geometry::PointCloud> ROI_PCD;
         std::shared_ptr<open3d::geometry::AxisAlignedBoundingBox> ROI_BOX;
         const Eigen::Vector3d minBound(-50.0, -12.0, -3.0);
-        const Eigen::Vector3d maxBound(50.0, 12.0, 4.0);
+        const Eigen::Vector3d maxBound(50.0, 12.0, 1.0);
+        //const Eigen::Vector3d minBound(-10.0, -6.4, -2.0);
+        //const Eigen::Vector3d maxBound(30.0, 6.5, 1.0);
         std::tie(ROI_PCD, ROI_BOX) = ROICrop(PCD_noStreet, minBound, maxBound);
 
         // Object Clustering
         auto ROI_inlier = OutlierRemoval(ROI_PCD, 30, 1.0);
         std::shared_ptr<open3d::geometry::PointCloud> PCD_Clustering;
         std::vector<std::vector<size_t>> PCDindices;
-        std::tie(PCD_Clustering, PCDindices) = DBSCANclustering(ROI_inlier, 0.8, 15);
+        std::tie(PCD_Clustering, PCDindices) = DBSCANclustering(ROI_inlier, 0.7, 10);
 
         // Draw Bounding boxes
         //auto ObjectBoxes = objectOrientedBoundingBox(PCD_Clustering, PCDindices);
@@ -72,7 +74,7 @@ int main(){
         visualizer.AddGeometry(Plane);
         visualizer.AddGeometry(PCD_Clustering);
         //visualizer.AddGeometry(PCD_noStreet);
-        //visualizer.AddGeometry(ROI_BOX);
+        visualizer.AddGeometry(ROI_BOX);
         visualizer.AddGeometry(axis);
         open3d::visualization::ViewControl &view_control = visualizer.GetViewControl();
         //view_control.SetFront(Eigen::Vector3d(-10, 0, 0));
